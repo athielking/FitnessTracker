@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\src\\projects\\FitnessTracker\\FitnessTracker\\FitnessTracker.csproj": {}
+    "C:\\code\\FitnessTracker\\FitnessTracker\\FitnessTracker.csproj": {}
   },
   "projects": {
-    "C:\\src\\projects\\FitnessTracker\\FitnessTracker\\FitnessTracker.csproj": {
+    "C:\\code\\FitnessTracker\\FitnessTracker\\FitnessTracker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\src\\projects\\FitnessTracker\\FitnessTracker\\FitnessTracker.csproj",
+        "projectUniqueName": "C:\\code\\FitnessTracker\\FitnessTracker\\FitnessTracker.csproj",
         "projectName": "FitnessTracker",
-        "projectPath": "C:\\src\\projects\\FitnessTracker\\FitnessTracker\\FitnessTracker.csproj",
-        "packagesPath": "C:\\Users\\athielk.DEVQA\\.nuget\\packages\\",
-        "outputPath": "C:\\src\\projects\\FitnessTracker\\FitnessTracker\\obj\\",
+        "projectPath": "C:\\code\\FitnessTracker\\FitnessTracker\\FitnessTracker.csproj",
+        "packagesPath": "C:\\Users\\dgodi\\.nuget\\packages\\",
+        "outputPath": "C:\\code\\FitnessTracker\\FitnessTracker\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\athielk.DEVQA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dgodi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,7 +25,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "http://devtfs:8080/tfs/DefaultCollection/_packaging/InternalNugetFeed/nuget/v3/index.json": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -41,6 +40,18 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
