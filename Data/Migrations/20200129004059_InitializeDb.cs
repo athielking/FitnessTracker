@@ -11,13 +11,13 @@ namespace FitnessTracker.Migrations
                 name: "Exercises",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ExerciseId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Exercises", x => x.Id);
+                    table.PrimaryKey("PK_Exercises", x => x.ExerciseId);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,9 +45,9 @@ namespace FitnessTracker.Migrations
                 name: "Logs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    LogId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(nullable: true),
+                    UserId = table.Column<int>(nullable: false),
                     Set = table.Column<int>(nullable: false),
                     Comments = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
@@ -55,53 +55,46 @@ namespace FitnessTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Logs", x => x.Id);
+                    table.PrimaryKey("PK_Logs", x => x.LogId);
                     table.ForeignKey(
                         name: "FK_Logs_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "LogExercise",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    LogId = table.Column<int>(nullable: true),
-                    ExerciseId = table.Column<int>(nullable: true),
+                    LogId = table.Column<int>(nullable: false),
+                    ExerciseId = table.Column<int>(nullable: false),
                     Reps = table.Column<int>(nullable: false),
                     Weight = table.Column<int>(nullable: false),
                     TargetRep = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LogExercise", x => x.Id);
+                    table.PrimaryKey("PK_LogExercise", x => new { x.LogId, x.ExerciseId });
                     table.ForeignKey(
                         name: "FK_LogExercise_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ExerciseId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_LogExercise_Logs_LogId",
                         column: x => x.LogId,
                         principalTable: "Logs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "LogId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_LogExercise_ExerciseId",
                 table: "LogExercise",
                 column: "ExerciseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LogExercise_LogId",
-                table: "LogExercise",
-                column: "LogId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Logs_UserId",

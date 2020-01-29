@@ -7,7 +7,10 @@ namespace FitnessTracker.Data.Entities
 {
     public class LogExercise
     {
-        public int Id { get; set; }
+        public int LogId { get; set; }
+
+        public int ExerciseId { get; set; }
+
         public Log Log { get; set; }
 
         public Exercise Exercise { get; set; }
