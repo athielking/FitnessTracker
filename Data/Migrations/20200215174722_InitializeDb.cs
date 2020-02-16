@@ -21,7 +21,7 @@ namespace FitnessTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -38,7 +38,7 @@ namespace FitnessTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,15 +57,15 @@ namespace FitnessTracker.Migrations
                 {
                     table.PrimaryKey("PK_Logs", x => x.LogId);
                     table.ForeignKey(
-                        name: "FK_Logs_User_UserId",
+                        name: "FK_Logs_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LogExercise",
+                name: "LogExercises",
                 columns: table => new
                 {
                     LogId = table.Column<int>(nullable: false),
@@ -76,15 +76,15 @@ namespace FitnessTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LogExercise", x => new { x.LogId, x.ExerciseId });
+                    table.PrimaryKey("PK_LogExercises", x => new { x.LogId, x.ExerciseId });
                     table.ForeignKey(
-                        name: "FK_LogExercise_Exercises_ExerciseId",
+                        name: "FK_LogExercises_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
                         principalColumn: "ExerciseId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LogExercise_Logs_LogId",
+                        name: "FK_LogExercises_Logs_LogId",
                         column: x => x.LogId,
                         principalTable: "Logs",
                         principalColumn: "LogId",
@@ -92,8 +92,8 @@ namespace FitnessTracker.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_LogExercise_ExerciseId",
-                table: "LogExercise",
+                name: "IX_LogExercises_ExerciseId",
+                table: "LogExercises",
                 column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
@@ -105,7 +105,7 @@ namespace FitnessTracker.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "LogExercise");
+                name: "LogExercises");
 
             migrationBuilder.DropTable(
                 name: "Exercises");
@@ -114,7 +114,7 @@ namespace FitnessTracker.Migrations
                 name: "Logs");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }
