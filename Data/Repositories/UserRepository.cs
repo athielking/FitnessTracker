@@ -52,18 +52,12 @@ namespace FitnessTracker.Data.Repositories
 
         public User Update(User userUpdate)
         {
-            _db.Attach(userUpdate).State = EntityState.Modified;
-            _db.Entry(userUpdate).Collection(c => c.Logs).IsModified = true;
+            _db.Entry(userUpdate).State = EntityState.Modified;
 
-            var logs = _db.Logs.Where( o => o.UserId == userUpdate.Id);
+            //// update user ref
+            _db.Entry(userUpdate).Reference(u => u.Logs).IsModified = true;
+            var x = _db.SaveChanges();
 
-            foreach (var log in logs)
-            {
-                log.User = null;
-                _db.Entry(log).Reference(o => o.User).IsModified = true;
-            }
-
-            _db.SaveChanges();
             return userUpdate;
         }
 

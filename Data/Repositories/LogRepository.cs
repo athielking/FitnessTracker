@@ -1,9 +1,11 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
+using AutoMapper;
 using FitnessTracker.Data.Entities;
 
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Data.Repositories
@@ -11,87 +13,75 @@ namespace FitnessTracker.Data.Repositories
     public class LogRepository : ILogRepository
     {
         private readonly FitnessTrackerContext _db;
+        private IMapper _mapper;
 
-        public LogRepository(FitnessTrackerContext db)
+        public LogRepository(FitnessTrackerContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         public IEnumerable<Log> GetAllLogs()
         {
-            var logs = _db.Logs
+            return _db.Logs
                 .AsNoTracking()
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
                 .Include(user => user.User)
+                .OrderBy( q => q.UserId)
                 .ToList();
+        }
 
-            return logs;
+        public Log GetLastRecord()
+        {
+            var x = _db.Logs.OrderByDescending(q => q.LogId).Take(1);
+
+            return x.FirstOrDefault();
         }
 
         public IEnumerable<Log> GetLogsByUserId(int id)
         {
-            var logs = _db.Logs
+            return _db.Logs
                 .AsNoTracking()
+                .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
-                .Include(user => user.User)
                 .Where(q => q.User.Id == id)
                 .ToList();
-
-            return logs;
         }
 
         public IEnumerable<Log> GetLogsByUserName(string username)
         {
-            var logs = _db.Logs
+            return _db.Logs
                 .AsNoTracking()
+                .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
-                .Include(user => user.User)
                 .Where( q => q.User.Username.Equals(username))
                 .ToList();
-
-            return logs;
         }
 
         public Log CreateLog(Log log)
         {
-            _db.Attach(log).State = EntityState.Added;
+            var logSaved = _db.Logs.Add(log).Entity;
             _db.SaveChanges();
-            return log;
+            return logSaved;
         }
 
-        public int GetLogCount(string username)
+        public int GetLogCount()
         {
-            var logs = _db.Logs
-                .AsNoTracking()
-                .Include(logex => logex.LogExercises)
-                .ThenInclude(log => log.Exercise)
-                .Include(user => user.User)
-                .Where(q => q.User.Username.Equals(username))
-                .ToList();
+            var logs = _db.Logs.ToList();
 
             return logs.Count();
         }
 
         public Log Update(Log logUpdate)
         {
-            var logs = new List<LogExercise>(logUpdate.LogExercises);
             _db.Entry(logUpdate).State = EntityState.Modified;
-           
-            // replace all logs with updated log information
-            _db.LogExercises.RemoveRange(_db.LogExercises.Where(obj => obj.LogId == obj.LogId ));
 
-            // update logs with the updated log information
-            foreach (var log in logs)
-            {
-                _db.Entry(log).State = EntityState.Added;
-            }
-
-            // update user ref
+            //// update user ref
             _db.Entry(logUpdate).Reference(u => u.User).IsModified = true;
-            _db.SaveChanges();
+            var x = _db.SaveChanges();
 
             return logUpdate;
         }
@@ -104,5 +94,6 @@ namespace FitnessTracker.Data.Repositories
             _db.SaveChanges();
             return results;
         }
+
     }
 }

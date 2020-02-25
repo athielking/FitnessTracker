@@ -18,9 +18,9 @@ namespace FitnessTracker.Data.Repositories
 
         public Exercise Create(Exercise exercise)
         {
-            _db.Attach(exercise).State = EntityState.Added;
+            var exerciseSaved = _db.Exercises.Add(exercise).Entity;
             _db.SaveChanges();
-            return exercise;
+            return exerciseSaved;
         }
 
         public Exercise Delete(int id)
@@ -56,25 +56,7 @@ namespace FitnessTracker.Data.Repositories
 
         public Exercise Update(Exercise exerciseUpdate)
         {
-            var exercises = new List<LogExercise>();
-            if (exerciseUpdate.LogExercises != null)
-            {
-                exercises = new List<LogExercise>(exerciseUpdate.LogExercises);
-            }
-
-            _db.Attach(exerciseUpdate).State = EntityState.Modified;
-
-            // replace all exercises with updated exercise information
-            _db.LogExercises.RemoveRange(
-                _db.LogExercises.Where(ex => ex.ExerciseId == exerciseUpdate.ExerciseId)
-            );
-
-            // update exercises with the updated exercise information
-            foreach (var exercise in exercises)
-            {
-                _db.Entry(exercise).State = EntityState.Added;
-            }
-
+            _db.Entry(exerciseUpdate).State = EntityState.Modified;
             _db.SaveChanges();
 
             return exerciseUpdate;

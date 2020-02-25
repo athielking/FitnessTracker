@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 using FitnessTracker.Data.Entities;
 using FitnessTracker.Data.Repositories;
+using AutoMapper;
+using FitnessTracker.DTO;
 
 namespace FitnessTracker.Controllers
 {
@@ -13,19 +15,22 @@ namespace FitnessTracker.Controllers
     {
         private readonly IExerciseRepository _exerciseRepository;
         private readonly ILogger<ExerciseController> _logger;
+        private readonly IMapper _mapper;
 
-        public ExerciseController(IExerciseRepository exerciseRepository, ILogger<ExerciseController> logger)
+        public ExerciseController(IExerciseRepository exerciseRepository, ILogger<ExerciseController> logger, IMapper mapper)
         {
             _exerciseRepository = exerciseRepository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<LogExercise>> Get()
+        public ActionResult<IEnumerable<ExerciseDTO>> Get()
         {
             try
             {
-                return Ok(_exerciseRepository.GetAllExercises());
+                var results = _exerciseRepository.GetAllExercises();
+                return Ok(_mapper.Map<IEnumerable<Exercise>, IEnumerable<ExerciseDTO>>(results));
             }
             catch (Exception ex)
             {
@@ -51,11 +56,14 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<Log> Get(int id)
+        public ActionResult<ExerciseDTO> Get(int id)
         {
             try
             {
-                return Ok(_exerciseRepository.GetExerciseById(id));
+                if (id == 0) return NotFound();
+
+                var results = _exerciseRepository.GetExerciseById(id);
+                return Ok(_mapper.Map<Exercise, ExerciseDTO>(results));
             }
             catch (Exception ex)
             {
@@ -65,11 +73,14 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Log> Post([FromBody]Exercise exercise)
+        public ActionResult<ExerciseDTO> Post([FromBody]ExerciseDTO exercise)
         {
             try
             {
-                return Ok(_exerciseRepository.Create(exercise));
+                var newexercise = _mapper.Map<ExerciseDTO, Exercise>(exercise);
+                var results = _exerciseRepository.Create(newexercise);
+
+                return Ok(_mapper.Map<Exercise, ExerciseDTO>(results));
             }
             catch (Exception ex)
             {
@@ -79,14 +90,17 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Exercise> Put(int id, [FromBody] Exercise exercise)
+        public ActionResult<ExerciseDTO> Put(int id, [FromBody] ExerciseDTO exercise)
         {
             if (id < 1 || id != exercise.ExerciseId)
             {
                 return BadRequest("Unable to update Exercise");
             }
 
-            return Ok(_exerciseRepository.Update(exercise));
+            var newexercise = _mapper.Map<ExerciseDTO, Exercise>(exercise);
+            var results = _exerciseRepository.Update(newexercise);
+
+            return Ok(_mapper.Map<Exercise, ExerciseDTO>(results));
         }
 
         [HttpDelete("{id}")]

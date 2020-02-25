@@ -5,6 +5,10 @@ using System;
 using System.Collections.Generic;
 
 using FitnessTracker.Services;
+using AutoMapper;
+using FitnessTracker.DTO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FitnessTracker.Controllers
 {
@@ -13,20 +17,22 @@ namespace FitnessTracker.Controllers
     {
         private readonly ILogService _logService;
         private readonly ILogger _logger;
-        
-        public LogController(ILogService logService, ILogger<Log> logger)
+        private readonly IMapper _mapper;
+
+        public LogController(ILogService logService, ILogger<Log> logger, IMapper mapper)
         {
             _logService = logService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Log>> Get()
+        public ActionResult<IEnumerable<LogDTO>> Get()
         {
             try
             {
                 var results = _logService.GetAllLogs();
-                return Ok(results);
+                return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
             }
             catch (Exception ex)
             {
@@ -37,14 +43,14 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult Get(int id)
+        public ActionResult<LogDTO> Get(int id)
         {
             try
             {
                 if (id == 0) return NotFound();
 
                 var results = _logService.GetLogsByUserId(id);
-                return Ok(results);
+                return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
             }
             catch (Exception ex)
             {
@@ -54,14 +60,14 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{username}")]
-        public IActionResult Get(string username)
+        public ActionResult<LogDTO> Get(string username)
         {
             try
             {
                 if (string.IsNullOrEmpty(username)) return NotFound();
-                
+
                 var results = _logService.GetLogsByUserName(username);
-                return Ok(results);
+                return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
             }
             catch (Exception ex)
             {
@@ -71,11 +77,16 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Log> Post([FromBody]Log log)
+        public ActionResult Post([FromBody]SaveLogDTO log)
         {
             try
-            { 
-                return Ok(_logService.CreateLog(log));
+            {
+                var newLog = _mapper.Map<SaveLogDTO, Log>(log);
+
+                var logCreated = _logService.CreateLog(newLog);
+                var results = _mapper.Map<Log, LogDTO>(logCreated);
+
+                return Ok(results);
             }
             catch (Exception ex)
             {
@@ -85,7 +96,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Log> Put(int id, [FromBody] Log log)
+        public ActionResult<LogDTO> Put(int id, [FromBody] SaveLogDTO log)
         {
             try
             {
@@ -94,7 +105,11 @@ namespace FitnessTracker.Controllers
                     return BadRequest("Unable to update Log");
                 }
 
-                return Ok(_logService.UpdateLog(log));
+                var tmpLog = _mapper.Map<SaveLogDTO, Log>(log, new Log());
+                var logUpdated = _logService.UpdateLog(tmpLog);
+                var results = _mapper.Map<Log, LogDTO>(logUpdated);
+
+                return Ok(results);
             }
             catch (Exception ex)
             {
@@ -105,7 +120,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Log> Delete(int id)
+        public ActionResult Delete(int id)
         {
             var customer = _logService.DeleteLog(id);
             if (customer == null)

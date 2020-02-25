@@ -17,5 +17,9 @@ namespace FitnessTracker.Data.Repositories
         Log Update(Log log);
 
         Log Delete(int id);
+
+        int GetLogCount();
+
+        Log GetLastRecord();
     }
 }

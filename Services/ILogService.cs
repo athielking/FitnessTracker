@@ -19,5 +19,9 @@ namespace FitnessTracker.Services
         Log UpdateLog(Log log);
 
         Log DeleteLog(int id);
+
+        int GetLogCount();
+
+        Log GetLastRecord();
     }
 }
