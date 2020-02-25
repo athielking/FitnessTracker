@@ -6,6 +6,8 @@ using System.IO;
 
 using FitnessTracker.Data.Entities;
 using FitnessTracker.Data.Repositories;
+using AutoMapper;
+using FitnessTracker.DTO;
 
 namespace FitnessTracker.Controllers
 {
@@ -14,19 +16,22 @@ namespace FitnessTracker.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly ILogger<UserController> _logger;
+        private readonly IMapper _mapper;
 
-        public UserController(ILogger<UserController> logger, IUserRepository userRepository)
+        public UserController(ILogger<UserController> logger, IUserRepository userRepository, IMapper mapper)
         {
             _logger = logger;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<User>> Get()
+        public ActionResult<IEnumerable<UserDTO>> Get()
         {
             try
             {
-                return Ok(_userRepository.GetAllUsers());
+                var results = _userRepository.GetAllUsers();
+                return Ok(_mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(results));
             }
             catch (Exception ex)
             {
@@ -37,11 +42,12 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{name}")]
-        public ActionResult<User> Get(string name)
+        public ActionResult<UserDTO> Get(string name)
         {
             try
             {
-                return Ok(_userRepository.GetByUsernameWithAllLogs(name));
+                var results = _userRepository.GetByUsername(name);
+                return Ok(_mapper.Map<User, UserDTO>(results));
             }
             catch (Exception ex)
             {
@@ -55,7 +61,8 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                return Ok(_userRepository.GetById(id));
+                var results = _userRepository.GetById(id);
+                return Ok(_mapper.Map<User, UserDTO>(results));
             }
             catch (Exception ex)
             {
@@ -65,7 +72,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPost]
-        public ActionResult<User> Post([FromBody] User user)
+        public ActionResult<UserDTO> Post([FromBody] UserDTO user)
         {
             try
             {
@@ -74,8 +81,10 @@ namespace FitnessTracker.Controllers
                     throw new InvalidDataException("User could not saved");
                 }
 
-                var results = _userRepository.Create(user);
-                return Ok(results);
+                var newuser = _mapper.Map<UserDTO, User>(user);
+                var results = _userRepository.Create(newuser);
+
+                return Ok(_mapper.Map<User, UserDTO>(results));
             }
             catch (Exception ex)
             {
@@ -85,7 +94,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<User> Put(int id, [FromBody] User user)
+        public ActionResult<UserDTO> Put(int id, [FromBody] UserDTO user)
         {          
             try
             {
@@ -93,9 +102,10 @@ namespace FitnessTracker.Controllers
                 {
                     return BadRequest("Parameter Id and customer ID must be the same");
                 }
+                var tmp = _mapper.Map<UserDTO, User>(user);
+                var results = _userRepository.Update(tmp);
 
-                return Ok(_userRepository.Update(user));
-
+                return Ok(_mapper.Map<User, UserDTO>(results));
             }
             catch (Exception ex)
             {
