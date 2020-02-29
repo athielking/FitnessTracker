@@ -50,6 +50,16 @@ namespace FitnessTracker.Data.Repositories
                 .ToList();
         }
 
+        public Log GetLogByUserId(int id)
+        {
+            return _db.Logs
+                .AsNoTracking()
+                .Include(user => user.User)
+                .Include(logex => logex.LogExercises)
+                .ThenInclude(log => log.Exercise)
+                .Where(q => q.User.Id == id).FirstOrDefault();
+        }
+
         public IEnumerable<Log> GetLogsByUserName(string username)
         {
             return _db.Logs
@@ -75,22 +85,23 @@ namespace FitnessTracker.Data.Repositories
             return logs.Count();
         }
 
-        public Log Update(Log logUpdate)
+        public Log Update(Log log)
         {
-            _db.Entry(logUpdate).State = EntityState.Modified;
+            _db.Update(log);
 
             //// update user ref
-            _db.Entry(logUpdate).Reference(u => u.User).IsModified = true;
+            _db.Entry(log).Reference(u => u.User).IsModified = true;
             var x = _db.SaveChanges();
 
-            return logUpdate;
+            return log;
         }
 
         public Log Delete(int id)
         {
-            if (GetLogsByUserId(id) == null) return null;
+            var log = GetLogByUserId(id);
+            if ( log == null) return null;
 
-            var results = _db.Remove(new Log { LogId = id }).Entity;
+            var results = _db.Remove(log).Entity;
             _db.SaveChanges();
             return results;
         }

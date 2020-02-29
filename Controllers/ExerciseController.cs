@@ -92,27 +92,44 @@ namespace FitnessTracker.Controllers
         [HttpPut("{id}")]
         public ActionResult<ExerciseDTO> Put(int id, [FromBody] ExerciseDTO exercise)
         {
-            if (id < 1 || id != exercise.ExerciseId)
+            try
             {
-                return BadRequest("Unable to update Exercise");
+                if (id < 1 || id != exercise.ExerciseId)
+                {
+                    return BadRequest("Unable to update Exercise");
+                }
+
+                var newexercise = _mapper.Map<ExerciseDTO, Exercise>(exercise);
+                var results = _exerciseRepository.Update(newexercise);
+
+                return Ok(_mapper.Map<Exercise, ExerciseDTO>(results));
             }
-
-            var newexercise = _mapper.Map<ExerciseDTO, Exercise>(exercise);
-            var results = _exerciseRepository.Update(newexercise);
-
-            return Ok(_mapper.Map<Exercise, ExerciseDTO>(results));
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to update exercise: {ex}");
+                return BadRequest("Failed to update exercise");
+            }
+                
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Log> Delete(int id)
-        {           
-            var customer = _exerciseRepository.Delete(id);
-            if (customer == null)
+        public IActionResult Delete(int id)
+        {
+            try
             {
-                return StatusCode(404, "Cannot delete Exercise. Cannot find Exercise");
-            }
+                var customer = _exerciseRepository.Delete(id);
+                if (customer == null)
+                {
+                    return NotFound("Cannot delete Exercise. Cannot find Exercise");
+                }
 
-            return NoContent();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to delete exercise: {ex}");
+                return BadRequest("Failed to delete exercise");
+            }
         }
     }
 }

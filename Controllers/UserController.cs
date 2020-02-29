@@ -116,15 +116,24 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<User> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var customer = _userRepository.Delete(id);
-            if (customer == null)
+            try
             {
-                return StatusCode(404, "Cannot delete user. User with ID " + id + " not found");
-            }
+                var user = _userRepository.Delete(id);
+                if (user == null)
+                {
+                    return NotFound("Cannot delete User. Cannot find User");
+                }
 
-            return NoContent();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to delete user: {ex}");
+                return BadRequest("Failed to delete user");
+            }
         }
+
     }
 }

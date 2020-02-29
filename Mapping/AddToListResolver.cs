@@ -22,8 +22,9 @@ namespace FitnessTracker.Mapping
         public Log Convert(SaveLogDTO src, Log des, ResolutionContext context)
         {
             var user = _mapper.Map<UserDTO, User>(src.User);
-            
-            lst.Add(src.LogExercise);
+            var logExercise = _mapper.Map<LogExerciseDTO, LogExercise>(src.LogExercise);
+ 
+            lst.Add(logExercise);
 
             Log log = new Log();
             log.User = user;

@@ -120,16 +120,23 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var customer = _logService.DeleteLog(id);
-            if (customer == null)
+            try
             {
-                return StatusCode(404, "Cannot delete Log. Cannot find Log");
+                var log = _logService.DeleteLog(id);
+                if (log == null)
+                {
+                    return NotFound("Cannot delete log. Cannot find Log");
+                }
+
+                return Ok();
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to delete log: {ex}");
+                return BadRequest("Failed to delete log");
+            }
         }
-
     }
 }

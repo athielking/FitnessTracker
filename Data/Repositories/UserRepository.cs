@@ -50,22 +50,23 @@ namespace FitnessTracker.Data.Repositories
             return userSaved;
         }
 
-        public User Update(User userUpdate)
+        public User Update(User user)
         {
-            _db.Entry(userUpdate).State = EntityState.Modified;
+            _db.Update(user);
 
             //// update user ref
-            _db.Entry(userUpdate).Reference(u => u.Logs).IsModified = true;
+            _db.Entry(user).Reference(u => u.Logs).IsModified = true;
             var x = _db.SaveChanges();
 
-            return userUpdate;
+            return user;
         }
 
         public User Delete(int id)
         {
-            if (GetById(id) == null) return null;
+            var user = GetById(id);
+            if ( user == null) return null;
 
-            var custRemoved = _db.Remove(new User { Id = id }).Entity;
+            var custRemoved = _db.Remove(user).Entity;
             _db.SaveChanges();
             return custRemoved;
         }

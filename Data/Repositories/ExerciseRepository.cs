@@ -1,5 +1,4 @@
 ﻿
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,11 +24,12 @@ namespace FitnessTracker.Data.Repositories
 
         public Exercise Delete(int id)
         {
-            if (GetExerciseById(id) == null) return null;
+            var exercise = GetExerciseById(id);
+            if (exercise == null) return null;
             
-            var resdults = _db.Remove(new Exercise { ExerciseId = id }).Entity;
+            var results = _db.Remove(exercise).Entity;
             _db.SaveChanges();
-            return resdults;
+            return results;
         }
 
         public IEnumerable<Exercise> GetAllExercises()
@@ -56,7 +56,7 @@ namespace FitnessTracker.Data.Repositories
 
         public Exercise Update(Exercise exerciseUpdate)
         {
-            _db.Entry(exerciseUpdate).State = EntityState.Modified;
+            _db.Update(exerciseUpdate);
             _db.SaveChanges();
 
             return exerciseUpdate;

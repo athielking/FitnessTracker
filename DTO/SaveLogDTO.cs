@@ -18,6 +18,6 @@ namespace FitnessTracker.DTO
 
         public DateTime Created { get; set; }
 
-        public LogExercise LogExercise { get; set; }
+        public LogExerciseDTO LogExercise { get; set; }
     }
 }
