@@ -12,6 +12,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using FitnessTracker.Data.Repositories;
+using System.Reflection;
+using AutoMapper;
+using Newtonsoft.Json;
+using FitnessTracker.Services;
 
 namespace FitnessTracker
 {
@@ -32,7 +37,16 @@ namespace FitnessTracker
                 config.UseSqlServer(_config.GetConnectionString("FitnesssTrackerConn"));
             });
 
+            // scans all the assemblies looking for all the classes that inherit AutoMapper.Profile class
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddTransient<ILogRepository, LogRepository>();
+            services.AddTransient<IExerciseRepository, ExerciseRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ILogService, LogService>();
+
             services.AddControllers();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

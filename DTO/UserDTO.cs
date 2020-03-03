@@ -1,15 +1,18 @@
-﻿
+﻿using FitnessTracker.Data.Entities;
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace FitnessTracker.Data.Entities
+namespace FitnessTracker.DTO
 {
-    public class User
+    public class UserDTO
     {
         public int Id { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; }
+
         public string FirstName { get; set; }
+
         public string LastName { get; set; }
 
         public string Street { get; set; }
@@ -21,7 +24,5 @@ namespace FitnessTracker.Data.Entities
         public string PhoneNumber { get; set; }
 
         public string Email { get; set; }
-
-        public ICollection<Log> Logs { get; set; }
     }
 }

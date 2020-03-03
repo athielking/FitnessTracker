@@ -84,7 +84,7 @@ namespace FitnessTracker.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.ToTable("LogExercise");
+                    b.ToTable("LogExercises");
                 });
 
             modelBuilder.Entity("FitnessTracker.Data.Entities.User", b =>
@@ -123,7 +123,7 @@ namespace FitnessTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("FitnessTracker.Data.Entities.Log", b =>
