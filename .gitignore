@@ -3,3 +3,7 @@
 ################################################################################
 
 /FitnessTracker.Core/bin/Debug/netcoreapp3.1
+/FitnessTracker.Core/obj
+/FitnessTracker.Data/bin/Debug/netcoreapp3.1
+/FitnessTracker.Data/obj
+/FitnessTracker/.gitignore
