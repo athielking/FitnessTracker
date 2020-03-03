@@ -1,4 +1,4 @@
-﻿using FitnessTracker.Data.Entities;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,8 +7,7 @@ using System.Collections.Generic;
 using FitnessTracker.Services;
 using AutoMapper;
 using FitnessTracker.DTO;
-using System.Linq;
-using System.Threading.Tasks;
+using FitnessTracker.Core.Entities;
 
 namespace FitnessTracker.Controllers
 {

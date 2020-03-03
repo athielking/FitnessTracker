@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using FitnessTracker.Data.Entities;
+﻿using System.Collections.Generic;
+using AutoMapper;
+
+using FitnessTracker.Core.Entities;
 using FitnessTracker.DTO;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FitnessTracker.Mapping
 {

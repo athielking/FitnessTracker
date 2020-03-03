@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using FitnessTracker.Data.Entities;
+using FitnessTracker.Core.Entities;
 
 namespace FitnessTracker.Services
 {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using FitnessTracker.Data.Entities;
+
+using FitnessTracker.Core.Entities;
 using FitnessTracker.Data.Repositories;
 
 namespace FitnessTracker.Services

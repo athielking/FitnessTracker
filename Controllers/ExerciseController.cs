@@ -3,10 +3,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
-using FitnessTracker.Data.Entities;
 using FitnessTracker.Data.Repositories;
 using AutoMapper;
 using FitnessTracker.DTO;
+using FitnessTracker.Core.Entities;
 
 namespace FitnessTracker.Controllers
 {

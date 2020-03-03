@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.EquivalencyExpression;
-using FitnessTracker.Data.Entities;
+using FitnessTracker.Core.Entities;
 using FitnessTracker.DTO;
 
 namespace FitnessTracker.Mapping
