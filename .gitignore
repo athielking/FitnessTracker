@@ -344,3 +344,7 @@ healthchecksdb
 /**bin*/
 /**obj*/
 packages
+
+# Output folder used by Webpack
+**/node_modules/*
+**/wwwroot/*

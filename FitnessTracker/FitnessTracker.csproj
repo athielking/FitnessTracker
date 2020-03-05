@@ -20,5 +20,10 @@
     <ProjectReference Include="..\FitnessTracker.Data\FitnessTracker.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Client\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 
 </Project>
