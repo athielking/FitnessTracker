@@ -13,7 +13,6 @@ export interface IUser{
 export interface ILogExercise{
   exerciseId
   exerciseName:string
-  set:number;  
   reps:number
   weight:number
   targetRep:number
@@ -22,7 +21,21 @@ export interface ILogExercise{
 export interface ILog{
   logId:number;
   user:IUser;
+  set:number;  
   comments:string;  
   created:string; 
   logExercises:ILogExercise[]
+}
+
+export interface ISingleLog{
+  logId:number;
+  user:IUser;
+  set:number;  
+  comments:string;  
+  created:string; 
+  exerciseId
+  exerciseName:string
+  reps:number
+  weight:number
+  targetRep:number
 }

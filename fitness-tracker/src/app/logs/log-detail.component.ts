@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {ILog} from './log'
+import {ILog, ISingleLog, ILogExercise} from './log'
 import { LogService } from './log-list.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { LogService } from './log-list.service';
 })
 export class LogDetailComponent implements OnInit {
 
-  log:ILog = undefined
+  logs:ISingleLog[] = []
   pageTitle:string = "Log Details: "
   errorMessage:string = ""
   
@@ -17,13 +17,39 @@ export class LogDetailComponent implements OnInit {
 
   ngOnInit(): void {
     let id = +this.route.snapshot.paramMap.get('id');
-    this.logService.getLogByid(id).subscribe({
-      next:(log:ILog) => {
-        this.log = log;
+    this.logService.getLogByid<ILog[]>(id).subscribe({
+      next:(logs:ILog[]) => {
+        this.logs = this.parseLogs(logs)
         this.pageTitle += `: ${id}`;
       },
       error:err => this.errorMessage = err
     })
+  }
+
+  parseLogs(logs):ISingleLog[]{
+    let tmpLogs:ISingleLog[] = []
+    for(var log of logs){
+      tmpLogs.push(this.createSingleLog(log, log.logExercises[0]))
+    }
+
+    return tmpLogs;
+  }
+
+  createSingleLog(log:ILog, exerciseLog:ILogExercise) :ISingleLog {
+    let tmpLog:ISingleLog = {
+      logId : log.logId,
+      user : log.user,
+      set : log.set,
+      comments : log.comments,
+      created : log.created,
+      exerciseId : exerciseLog.exerciseId,
+      exerciseName : exerciseLog.exerciseName,
+      reps : exerciseLog.reps,
+      targetRep : exerciseLog.targetRep,
+      weight : exerciseLog.weight     
+    }
+
+    return tmpLog;
   }
 
   onBack():void{

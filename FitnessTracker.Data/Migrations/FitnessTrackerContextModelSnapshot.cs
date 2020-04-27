@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace FitnessTracker.Migrations
+namespace FitnessTracker.Api.Migrations
 {
     [DbContext(typeof(FitnessTrackerContext))]
     partial class FitnessTrackerContextModelSnapshot : ModelSnapshot
@@ -15,11 +15,11 @@ namespace FitnessTracker.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FitnessTracker.Data.Entities.Exercise", b =>
+            modelBuilder.Entity("FitnessTracker.Core.Entities.Exercise", b =>
                 {
                     b.Property<int>("ExerciseId")
                         .ValueGeneratedOnAdd()
@@ -34,7 +34,7 @@ namespace FitnessTracker.Migrations
                     b.ToTable("Exercises");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Data.Entities.Log", b =>
+            modelBuilder.Entity("FitnessTracker.Core.Entities.Log", b =>
                 {
                     b.Property<int>("LogId")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace FitnessTracker.Migrations
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Data.Entities.LogExercise", b =>
+            modelBuilder.Entity("FitnessTracker.Core.Entities.LogExercise", b =>
                 {
                     b.Property<int>("LogId")
                         .HasColumnType("int");
@@ -87,7 +87,7 @@ namespace FitnessTracker.Migrations
                     b.ToTable("LogExercises");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Data.Entities.User", b =>
+            modelBuilder.Entity("FitnessTracker.Core.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,27 +123,27 @@ namespace FitnessTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Data.Entities.Log", b =>
+            modelBuilder.Entity("FitnessTracker.Core.Entities.Log", b =>
                 {
-                    b.HasOne("FitnessTracker.Data.Entities.User", "User")
+                    b.HasOne("FitnessTracker.Core.Entities.User", "User")
                         .WithMany("Logs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FitnessTracker.Data.Entities.LogExercise", b =>
+            modelBuilder.Entity("FitnessTracker.Core.Entities.LogExercise", b =>
                 {
-                    b.HasOne("FitnessTracker.Data.Entities.Exercise", "Exercise")
+                    b.HasOne("FitnessTracker.Core.Entities.Exercise", "Exercise")
                         .WithMany("LogExercises")
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FitnessTracker.Data.Entities.Log", "Log")
+                    b.HasOne("FitnessTracker.Core.Entities.Log", "Log")
                         .WithMany("LogExercises")
                         .HasForeignKey("LogId")
                         .OnDelete(DeleteBehavior.Cascade)

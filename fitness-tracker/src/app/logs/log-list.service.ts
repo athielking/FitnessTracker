@@ -13,11 +13,11 @@ export class LogService{
   constructor(private httpCleintService:HttpClientService){
   }
   
-  getLogs(){
-    return this.httpCleintService.get<ILog[]>(path + "api/log")
+  getLogs<T>(){
+    return this.httpCleintService.get<T>(path + "api/log")
   }
 
-  getLogByid(id){
-    return this.httpCleintService.get<ILog>(path + 'api/log/id=' + id)
+  getLogByid<T>(id){
+    return this.httpCleintService.get<T>(path + 'api/log/' + id)
   }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace FitnessTracker.Migrations
+namespace FitnessTracker.Api.Migrations
 {
-    public partial class InitializeDb : Migration
+    public partial class FitnessTrackerData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,7 +21,7 @@ namespace FitnessTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -38,7 +38,7 @@ namespace FitnessTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,9 +57,9 @@ namespace FitnessTracker.Migrations
                 {
                     table.PrimaryKey("PK_Logs", x => x.LogId);
                     table.ForeignKey(
-                        name: "FK_Logs_Users_UserId",
+                        name: "FK_Logs_User_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -114,7 +114,7 @@ namespace FitnessTracker.Migrations
                 name: "Logs");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "User");
         }
     }
 }
