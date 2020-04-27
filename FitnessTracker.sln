@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessTracker", "FitnessTracker.APi\FitnessTracker.Api.csproj", "{D53DA97A-7683-41AA-B66D-9F2CE8DC19DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessTracker.Api", "FitnessTracker.APi\FitnessTracker.Api.csproj", "{D53DA97A-7683-41AA-B66D-9F2CE8DC19DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessTracker.Data", "FitnessTracker.Data\FitnessTracker.Data.csproj", "{C39A6414-8DAC-49A6-AF5C-29F44C23C473}"
 EndProject
