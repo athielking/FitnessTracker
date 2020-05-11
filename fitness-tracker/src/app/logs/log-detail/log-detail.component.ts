@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {ILog, ISingleLog, ILogExercise} from './log'
-import { LogService } from './log-list.service';
+import {ILog, ISingleLog, ILogExercise} from '../log'
+import { LogService } from '../log.service';
 
 @Component({
   templateUrl: './log-detail.component.html',

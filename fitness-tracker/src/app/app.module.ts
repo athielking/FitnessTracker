@@ -1,33 +1,32 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router'
+import { RouterModule, Routes } from '@angular/router'
 
 import { AppComponent } from "./app.component";
-import { LogListComponent } from "./logs/log-list.component";
 import { HttpClientModule } from '@angular/common/http';
-import { LogDetailComponent } from './logs/log-detail.component';
 import { WelcomeComponent } from './home/welcome.component';
+import { LogsModule } from './logs/logs.module';
+
+const appRoute: Routes = [
+    {path: 'logs', redirectTo: '/logs', pathMatch: 'full'},
+    {path: 'welcome', component: WelcomeComponent},
+    {path: '', redirectTo: 'welcome', pathMatch: 'full'},
+    {path: '**', redirectTo: 'welcome', pathMatch: 'full'}
+]
 
 @NgModule({
   declarations: [
     AppComponent,
-    LogListComponent,
-    LogDetailComponent,
     WelcomeComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,   
     HttpClientModule,
-    ReactiveFormsModule,
-    RouterModule.forRoot([
-      {path: 'logs', component: LogListComponent},
-      {path: 'logs/:id', component: LogDetailComponent},
-      {path: 'welcome', component: WelcomeComponent},
-      {path: '', redirectTo: 'welcome', pathMatch: 'full'},
-      {path: '**', redirectTo: 'welcome', pathMatch: 'full'}
-    ])
+    LogsModule,
+    RouterModule.forRoot(appRoute)
   ],
   providers: [],
   bootstrap: [AppComponent]

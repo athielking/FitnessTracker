@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core"
-import {ILog} from "./log"
-import { LogService } from './log-list.service';
+import {ILog} from "../log"
+import { LogService } from '../log.service';
 import { FormGroup, FormControl } from '@angular/forms';
 
 
