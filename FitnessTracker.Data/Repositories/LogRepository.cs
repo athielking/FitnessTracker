@@ -82,6 +82,30 @@ namespace FitnessTracker.Data.Repositories
 
         public Log Update(Log log)
         {
+            //_db.UpdateRange(log);
+            //_db.Update(log);
+
+            //// update user ref
+            //_db.Entry(log).Reference(u => u.User).IsModified = true;
+            //_db.Entry(log).Collection<LogExercise>(u => u.LogExercises).IsModified = true;
+
+            //_ = GetLogById(log.LogId);
+            //Log tmp = log;
+            //tmp.Comments = log.Comments;
+            //var x = tmp.LogExercises.First();
+            //var y = log.LogExercises.First();
+            //x.Weight = y.Weight;
+            //x.Reps = y.Reps;
+            //x.TargetRep = y.TargetRep;
+
+            //bool tracking = _db.ChangeTracker.Entries<Log>().Any(x => x.Entity.LogId == log.LogId);
+            //bool tracking1 = _db.ChangeTracker.Entries<LogExercise>().Any(x => x.Entity.Weight == log.LogExercises.First().Weight);
+            //_db.Update(log);
+
+            //_db.Entry(log).Reference(u => u.User).IsModified = true;
+
+            //_db.Entry(tmp).State = EntityState.Modified;
+
             _db.Update(log);
             var z = _db.SaveChanges();
 
