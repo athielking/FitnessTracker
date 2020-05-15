@@ -12,7 +12,7 @@ namespace FitnessTracker.Services
 
         IEnumerable<Log> GetAllLogs();
 
-        IEnumerable<Log> GetLogsByUserId(int id);
+        Log GetLogById(int id);
 
         IEnumerable<Log> GetLogsByUserName(string username);
 

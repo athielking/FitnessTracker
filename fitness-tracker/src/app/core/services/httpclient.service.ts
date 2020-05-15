@@ -1,18 +1,18 @@
 import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError, Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpClientService{
-  
-  private _headers = new HttpHeaders();
-  
-  constructor(private http:HttpClient){
-    this._headers.set('Content-Type', 'application/json');
-  }
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
+  constructor(private http:HttpClient){}
 
   get<T>(path):Observable<T>{
     return this.http.get<T>(path).pipe(
@@ -21,6 +21,11 @@ export class HttpClientService{
     );
   }
 
+  put<T>(path, obj:T){
+    return this.http.put(path, obj, this.httpOptions)
+    .pipe(catchError(this.handleError))      
+  }
+  
   handleError(err: HttpErrorResponse){
     let errorMessage = '';
     if(err.error instanceof ErrorEvent){

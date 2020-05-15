@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Api.Migrations
 {
     [DbContext(typeof(FitnessTrackerContext))]
-    [Migration("20200427223501_FitnessTracker.Data")]
+    [Migration("20200514224251_FitnessTracker.Data")]
     partial class FitnessTrackerData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

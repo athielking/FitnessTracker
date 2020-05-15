@@ -20,42 +20,16 @@
   <div class="table-responsive">
     <table class="table" *ngIf="logs && logs.length">
       <thead>
-        <tr>
-          <th>
-            Date
-          </th>
-          <th>
-            Username
-          </th>
-          <th>
-            Name
-          </th>
-          <th>
-            comments
-          </th>
+        <tr><th>Date</th>
+            <th>Username</th>
+            <th>Name</th>
+            <th>comments</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let log of filteredLogs">
-          <td>
-              <a [routerLink] = "['/logs', log.logId]">{{log.created}}</a>
-          </td>
-          <td>
-            {{log.user.username}}
-          </td>
-          <td>
-            {{log.user.firstName}} {{log.user.lastName}}
-          </td>
-          <td>
-            {{log.comments}}
-          </td>
-        </tr>
+        <log-detail *ngFor="let log of filteredLogs" [log]="log"></log-detail>
       </tbody>
     </table>
   </div>
 </div>
 
-<button (click)="getTestLogs()">get logs</button>
-<div *ngFor="let log of testlogs">
-  {{log | json}}
-</div>

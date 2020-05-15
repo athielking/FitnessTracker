@@ -1,0 +1,24 @@
+<div class="card-body">
+    <form [formGroup]="logForm" >
+        <div class="form-group">
+            <label for="set">Set:</label>
+            <input type="text" class="form-control" formControlName = "set" placeholder="Enter set">
+        </div>
+        <div class="form-group">
+            <label for="weight">Weight:</label>
+            <input type="text" class="form-control" formControlName = "weight" placeholder="Enter weight">
+        </div>
+        <div class="form-group">
+            <label for="reps">Reps:</label>
+            <input type="text" class="form-control" formControlName = "reps" placeholder="Enter reps">
+        </div>
+        <div class="form-group">
+            <label for="targetRep">Target Reps:</label>
+            <input type="text" class="form-control" formControlName = "targetRep" placeholder="Enter target reps">
+        </div>
+
+        <p>
+            <button (click)="onSubmit()" [disabled]="logForm.invalid">Save</button>
+        </p>
+    </form>
+</div>

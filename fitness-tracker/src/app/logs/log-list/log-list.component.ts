@@ -35,7 +35,7 @@ export class LogListComponent implements OnInit {
     
     this.initFormGroup()
     
-    this.logService.getLogs<ILog[]>().subscribe( {
+    this.logService.getLogs().subscribe( {
       next:(logs:ILog[]) => {
         this.logs = logs 
         this.filteredLogs = this.logs;
@@ -47,15 +47,6 @@ export class LogListComponent implements OnInit {
   logFilterChanges(value){
     this.logsFilter = value
     this.filteredLogs = this.logsFilter ? this.performFilter(this.logsFilter) : this.logs
-  }
-
-  getTestLogs(){
-    this.logService.getLogs<ILog[]>().subscribe( {
-      next:(logs:ILog[]) => {
-        this.testlogs = this.logs;
-      },
-      error:err => this.errorMessage = err
-    });
   }
 
   private initFormGroup(){

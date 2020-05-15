@@ -6,11 +6,15 @@ import { LogListComponent } from './log-list/log-list.component';
 import { LogDetailComponent } from './log-detail/log-detail.component';
 
 import { LogsRoutingModule } from './logs-routing.module';
+import { LogEditComponent } from './log-edit/log-edit.component';
+import { LogFormComponent } from './log-form/log-form.component';
 
 @NgModule({
     declarations: [
         LogListComponent,
-        LogDetailComponent
+        LogDetailComponent,
+        LogFormComponent,       
+        LogEditComponent
     ],
     imports: [
         CommonModule,
@@ -19,4 +23,4 @@ import { LogsRoutingModule } from './logs-routing.module';
         LogsRoutingModule
     ]
 })
-export class LogsModule {}
+export class LogsModule {} 

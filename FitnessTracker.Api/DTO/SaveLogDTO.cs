@@ -8,6 +8,8 @@ namespace FitnessTracker.DTO
 
         public UserDTO User { get; set; }
 
+        public int Set { get; set; }
+
         public string Comments { get; set; }
 
         public DateTime Created { get; set; }

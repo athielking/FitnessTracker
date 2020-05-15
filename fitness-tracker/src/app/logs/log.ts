@@ -39,3 +39,12 @@ export interface ISingleLog{
   weight:number
   targetRep:number
 }
+
+export interface ISaveLog{
+  logId:number;
+  user:IUser;
+  set:number;  
+  comments:string;  
+  created:string; 
+  logExercise:ILogExercise;
+}

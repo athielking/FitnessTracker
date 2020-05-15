@@ -34,15 +34,15 @@ namespace FitnessTracker.Data.Repositories
             return x.FirstOrDefault();
         }
 
-        public IEnumerable<Log> GetLogsByUserId(int id)
+        public Log GetLogById(int id)
         {
             return _db.Logs
-                .AsNoTracking()
+                //.AsNoTracking()
                 .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
-                .Where(q => q.User.Id == id)
-                .ToList();
+                .Where(q => q.LogId == id)
+                .SingleOrDefault();
         }
 
         public Log GetLogByUserId(int id)
@@ -83,10 +83,7 @@ namespace FitnessTracker.Data.Repositories
         public Log Update(Log log)
         {
             _db.Update(log);
-
-            //// update user ref
-            _db.Entry(log).Reference(u => u.User).IsModified = true;
-            var x = _db.SaveChanges();
+            var z = _db.SaveChanges();
 
             return log;
         }

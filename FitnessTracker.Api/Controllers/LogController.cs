@@ -49,8 +49,8 @@ namespace FitnessTracker.Controllers
             {
                 if (id == 0) return NotFound();
 
-                var results = _logService.GetLogsByUserId(id);
-                return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
+                var result = _logService.GetLogById(id);
+                return Ok(_mapper.Map<Log, LogDTO>(result));
             }
             catch (Exception ex)
             {

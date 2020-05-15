@@ -1,23 +1,27 @@
 import { Injectable } from "@angular/core"
 
-import { ILog} from "./log"
+import { ILog, ISaveLog} from "./log"
 import { HttpClientService } from '../core/services/httpclient.service'
 
-const path:string = "http://localhost:5001/"
+const path:string = "http://localhost:5001/api/log/"
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class LogService{
 
-  constructor(private httpCleintService:HttpClientService){
-  }
-  
-  getLogs<T>(){
-    return this.httpCleintService.get<T>(path + "api/log")
-  }
+    constructor(private httpCleintService:HttpClientService){
+    }
+    
+    getLogs(){
+      return this.httpCleintService.get<ILog[]>(path)
+    }
 
-  getLogByid<T>(id){
-    return this.httpCleintService.get<T>(path + 'api/log/' + id)
-  }
+    getLogByid(id){
+      return this.httpCleintService.get<ILog>(path + id)
+    }
+
+    updateLog(log:ISaveLog){
+      return this.httpCleintService.put<ISaveLog>(path + log.logId, log);
+    }
 }
