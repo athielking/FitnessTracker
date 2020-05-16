@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using FitnessTracker.Core.Entities;
+using System.Linq;
 
 namespace FitnessTracker.Data
 {
@@ -21,6 +22,8 @@ namespace FitnessTracker.Data
             modelBuilder.Entity<LogExercise>()
                 .HasKey(bc => new { bc.LogId, bc.ExerciseId });
             modelBuilder.Entity<LogExercise>()
+                .HasIndex(bc => new { bc.LogId, bc.ExerciseId }).IsUnique(true);
+            modelBuilder.Entity<LogExercise>()
                 .HasOne(bc => bc.Log)
                 .WithMany(b => b.LogExercises)
                 .HasForeignKey(bc => bc.LogId);
@@ -32,6 +35,18 @@ namespace FitnessTracker.Data
                 .HasOne(bc => bc.User)
                 .WithMany(c => c.Logs)
                 .HasForeignKey(bc => bc.UserId);
+        }
+
+        public void DetachAllEntities()
+        {
+            var changedEntriesCopy = this.ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added ||
+                            e.State == EntityState.Modified ||
+                            e.State == EntityState.Deleted)
+                .ToList();
+
+            foreach (var entry in changedEntriesCopy)
+                entry.State = EntityState.Detached;
         }
     }
 }

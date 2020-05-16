@@ -34,10 +34,8 @@ namespace FitnessTracker.Mapping
             log.LogExercises = new List<LogExercise>(lst);
 
             if (des != null)
-            {
-                des = log;
-                des.LogId = (int)src.LogId;
-                return des;
+            {               
+                log.LogId = (int)src.LogId;
             }
 
             return log;

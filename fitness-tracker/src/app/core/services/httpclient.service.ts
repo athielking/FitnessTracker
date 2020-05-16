@@ -21,7 +21,7 @@ export class HttpClientService{
     );
   }
 
-  put<T>(path, obj:T){
+  put<T>(path, obj:T): Observable<any>{
     return this.http.put(path, obj, this.httpOptions)
     .pipe(catchError(this.handleError))      
   }

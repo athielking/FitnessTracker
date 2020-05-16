@@ -37,7 +37,7 @@ namespace FitnessTracker.Data.Repositories
         public Log GetLogById(int id)
         {
             return _db.Logs
-                //.AsNoTracking()
+                .AsNoTracking()
                 .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
@@ -52,7 +52,7 @@ namespace FitnessTracker.Data.Repositories
                 .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
-                .Where(q => q.User.Id == id).FirstOrDefault();
+                .Where(q => q.LogId == id).FirstOrDefault();
         }
 
         public IEnumerable<Log> GetLogsByUserName(string username)
@@ -89,10 +89,21 @@ namespace FitnessTracker.Data.Repositories
             //_db.Entry(log).Reference(u => u.User).IsModified = true;
             //_db.Entry(log).Collection<LogExercise>(u => u.LogExercises).IsModified = true;
 
-            //_ = GetLogById(log.LogId);
-            //Log tmp = log;
-            //tmp.Comments = log.Comments;
-            //var x = tmp.LogExercises.First();
+            Log tmp = GetLogById(log.LogId);
+            tmp.Comments = log.Comments;
+           // var x = tmp.LogExercises.Where(s => s.LogId.Equals(log.LogId)).FirstOrDefault();
+           // x = 
+            //x = 
+            var logExecise = log.LogExercises.First();
+            foreach (var obj in tmp.LogExercises.Where(w => w.LogId == log.LogId))
+            {
+                obj.Reps = logExecise.Reps;
+                obj.Weight = logExecise.Weight;
+                obj.TargetRep = logExecise.TargetRep;
+            }
+
+            //tmp.LogExercises.Select(c => { c.Weight = 50; return c; }).ToList();
+
             //var y = log.LogExercises.First();
             //x.Weight = y.Weight;
             //x.Reps = y.Reps;
@@ -105,8 +116,11 @@ namespace FitnessTracker.Data.Repositories
             //_db.Entry(log).Reference(u => u.User).IsModified = true;
 
             //_db.Entry(tmp).State = EntityState.Modified;
+            //_db.DetachAllEntities();
 
-            _db.Update(log);
+            //_db.Entry(tmp).CurrentValues.SetValues(log);
+
+            _db.Update(tmp);
             var z = _db.SaveChanges();
 
             return log;

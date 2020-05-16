@@ -1,21 +1,22 @@
 export interface IUser{
   id
-  username:string
-  firstName:string
-  lastName:string
-  street:string
-  city:string
-  zip:string
-  phoneNumber:string
-  email:string
+  username:string;
+  firstName:string;
+  lastName:string;
+  street:string;
+  city:string;
+  zip:string;
+  phoneNumber:string;
+  email:string;
 }
 
 export interface ILogExercise{
-  exerciseId
-  exerciseName:string
-  reps:number
-  weight:number
-  targetRep:number
+  logId:number;
+  exerciseId:number;
+  exerciseName:string;
+  reps:number;
+  weight:number;
+  targetRep:number;
 }
 
 export interface ILog{
@@ -33,11 +34,11 @@ export interface ISingleLog{
   set:number;  
   comments:string;  
   created:string; 
-  exerciseId
-  exerciseName:string
-  reps:number
-  weight:number
-  targetRep:number
+  exerciseId;
+  exerciseName:string;
+  reps:number;
+  weight:number;
+  targetRep:number;
 }
 
 export interface ISaveLog{

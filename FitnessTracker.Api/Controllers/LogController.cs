@@ -95,7 +95,7 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public ActionResult<LogDTO> Put(int id, [FromBody] SaveLogDTO log)
         {
             try
@@ -118,6 +118,30 @@ namespace FitnessTracker.Controllers
             }
 
         }
+
+        //[HttpPut("{id}")]
+        //public ActionResult<LogDTO> Put(int id, [FromBody] LogDTO log)
+        //{
+        //    try
+        //    {
+        //        if (id < 1 || id != log.LogId)
+        //        {
+        //            return BadRequest("Unable to update Log");
+        //        }
+
+        //        var tmpLog = _mapper.Map<LogDTO, Log>(log);
+        //        var logUpdated = _logService.UpdateLog(tmpLog);
+        //        var results = _mapper.Map<Log, LogDTO>(logUpdated);
+
+        //        return Ok(results);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Failed to update log: {ex}");
+        //        return BadRequest("Failed to update log");
+        //    }
+
+        //}
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

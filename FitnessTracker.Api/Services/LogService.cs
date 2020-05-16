@@ -59,9 +59,6 @@ namespace FitnessTracker.Services
 
         public Log UpdateLog(Log log)
         {
-            var exercise = _exerciseRepository.GetExerciseById(log.LogExercises.First().ExerciseId);
-            log.LogExercises.First().Exercise = exercise;
-
             return _logRepository.Update(log);
         }
 

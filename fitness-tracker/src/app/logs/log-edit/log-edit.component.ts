@@ -48,7 +48,11 @@ import { LogService } from '../log.service';
 
     editLog($event){
         let log:ISaveLog = this.createSaveLog($event);
-        this.logService.updateLog(log);
+        this.logService.updateLog(log).subscribe( (data: ILog) =>{
+            console.log("update successful")
+        },
+            (error: any) => console.log(error)
+        )
     }
 
     createSaveLog(log: ISingleLog) : ISaveLog{
@@ -66,6 +70,7 @@ import { LogService } from '../log.service';
 
     createLogExercise(log: ISingleLog):ILogExercise{
         const tmpLogExercise:ILogExercise = {
+            logId : log.logId,
             exerciseId : log.exerciseId,
             exerciseName: log.exerciseName,
             reps: log.reps,

@@ -12,6 +12,7 @@ using AutoMapper;
 using FitnessTracker.Services;
 using FitnessTracker.Data;
 using FitnessTracker.Data.Repositories;
+using Microsoft.Net.Http.Headers;
 
 namespace FitnessTracker
 {
@@ -34,7 +35,9 @@ namespace FitnessTracker
                 options.AddPolicy(name: _allowOrigins,
                  builder =>
                  {
-                     builder.WithOrigins("http://localhost:4200");
+                     builder.WithOrigins("http://localhost:4200")
+                     .WithHeaders(HeaderNames.ContentType, "application/json")
+                     .WithMethods("PUT", "DELETE");
                  });
             });
 
