@@ -1,16 +1,21 @@
-<tr>
-  <td>
-    <a [routerLink] = "['/logs', log.logId]">{{log.created}}</a>
-  </td>
-  <td>
-  {{log.user.username}}
-  </td>
-  <td>
-  {{log.user.firstName}} {{log.user.lastName}}
-  </td>
-  <td>
-  {{log.comments}}
-  </td>
-</tr>
 
+  <ul class="log-list log-list-row">
+    <a [routerLink] = "['/logs', log.logId]">
+    <li class="col-width-med">
+      {{log.created | date : "EEE, MMMM d, y"}}
+    </li>
+    <li class="col-width-short">
+      {{log.created | date : "shortTime"}}
+    </li>
+    <li class="col-width-med">
+      {{log.user.username}}
+    </li>
+    <li class="col-width-med">
+      {{log.user.firstName}} {{log.user.lastName}}
+    </li>
+    <li class="col-width-long">
+      {{log.comments}}
+    </li>
+    </a>
+  </ul>
 

@@ -37,7 +37,7 @@ namespace FitnessTracker
                  {
                      builder.WithOrigins("http://localhost:4200")
                      .WithHeaders(HeaderNames.ContentType, "application/json")
-                     .WithMethods("PUT", "DELETE");
+                     .WithMethods("PUT", "DELETE", "GET");
                  });
             });
 

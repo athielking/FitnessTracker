@@ -59,6 +59,8 @@ namespace FitnessTracker.Services
 
         public Log UpdateLog(Log log)
         {
+            var user = _userRepository.GetById(log.User.Id);
+            log.User = user;
             return _logRepository.Update(log);
         }
 

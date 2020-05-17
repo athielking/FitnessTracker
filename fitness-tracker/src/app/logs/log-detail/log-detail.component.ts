@@ -5,7 +5,7 @@ import {ILog, ISingleLog, ILogExercise} from '../log'
 @Component({
   selector: 'log-detail',
   templateUrl: './log-detail.component.html',
-  styleUrls: ['./log-detail.component.css']
+  styleUrls: ['../log.css']
 })
 export class LogDetailComponent implements OnInit {
   

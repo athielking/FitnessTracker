@@ -6,7 +6,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   templateUrl: "./log-list.component.html",
-  styleUrls: ["./log-list.component.css"]
+  styleUrls: ["../log.css"]
 })
 
 

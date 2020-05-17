@@ -1,0 +1,33 @@
+label{font-weight: bold;}
+
+.col-width-short {width:100px; float:left}
+.col-width-med {width:200px; float:left}
+.col-width-long {min-width:365px; float:left}
+
+.log-list {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.log-list-header{
+  margin-left:0px;
+  margin-right:0px; 
+  margin-bottom:5px;
+
+  font-weight: bold;
+  border-bottom: solid 1px gray;
+}
+
+.log-list a {
+    color:black;
+}
+
+.log-list-row a:hover{
+  color:white;
+  background-color: gray;
+}
