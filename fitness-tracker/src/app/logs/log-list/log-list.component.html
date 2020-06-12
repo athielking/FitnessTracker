@@ -1,46 +1,27 @@
-<div class="card">
-    <div class="card-header">
-        {{pageTitle}}
-    </div>
-    <div class="card-body">
-        <form [formGroup]="logForm">
-          <div class="row">
-            <div class="col-md-2">Filter by:</div>
-            <div class="col-md-4">
-                <input type="text" formControlName = "logFilter"/>
-            </div>
-          </div>
-        </form>
-        <div class="row">
-            <div class="col-md-6">
-                <h4>Filterd by: {{logsFilter}}</h4>
-            </div>
-        </div>
-        
-        <div *ngIf="logs && logs.length">
-            <div class="row log-list-header">
-                <ul class="log-list log-list-row">
-                    <li class="col-width-med">
-                      Date
-                    </li>
-                    <li class="col-width-short">
-                      Time
-                    </li>
-                    <li class="col-width-med">
-                      Username
-                    </li>
-                    <li class="col-width-med">
-                      Name
-                    </li>
-                    <li class="col-width-long">
-                      Comments
-                    </li>
-                  </ul>
-            </div>
-            <div *ngFor="let log of filteredLogs">
-                <log-detail [log]="log"></log-detail>
-            </div>    
-        </div>
-    </div>
 
-</div>
+
+<div class="card-footer">  
+  <form [formGroup]="logForm">
+      <div class="row">
+          <div class="col-md-1">Filter by:</div>
+          <div class="col-md-4">
+              <input type="text" formControlName = "logFilter"/>
+          </div>
+      </div>
+    </form>
+    <div class="col-lg-12 table-responsive">  
+        <table class="table table-striped">  
+            <thead>  
+                <tr>  
+                    <th>Logs</th>  
+                </tr>  
+            </thead>  
+            <tbody>  
+                <tr *ngFor="let log of filteredLogs$ | async">  
+                    <log-detail [log]="log"></log-detail>
+                    <td *ngIf="log.set==1"><button type="button" class="btn btn-success mr-1" [routerLink]="['/log-add-set', log.logId, log.created]">Create Set</button> </td>
+                </tr>  
+            </tbody>  
+        </table>  
+    </div>  
+</div>  

@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core"
+import { Observable, BehaviorSubject } from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { ILog, ISaveLog} from "./log"
 import { HttpClientService } from '../core/services/httpclient.service'
-import { Observable } from 'rxjs'
+import { ILog, ISaveLog, createLog} from "../shared/models/log"
 
 const path:string = "http://localhost:5001/api/log"
 
@@ -11,18 +12,45 @@ const path:string = "http://localhost:5001/api/log"
 })
 export class LogService{
 
-    constructor(private httpCleintService:HttpClientService){
-    }
-    
-    getLogs(){
-      return this.httpCleintService.get<ILog[]>(path)
+    private _getLogs: BehaviorSubject<ILog[]> = new BehaviorSubject(null);
+    public logList$: Observable<ILog[]> = this._getLogs.asObservable();
+
+    private _getLog: BehaviorSubject<ILog> = new BehaviorSubject(null);
+    public log$: Observable<ILog> = this._getLog.asObservable();
+  
+    constructor(private httpClientService:HttpClientService){
     }
 
-    getLogByid(id){
-      return this.httpCleintService.get<ILog>(`${path}/${id}`)
+    getLogs():Observable<ILog[]>{
+        return this.httpClientService.get<ILog[]>(path)
+        .pipe(map( (logs:ILog[]) =>{
+            return logs.map( log => createLog(log))
+        }));
+    }
+
+    getLogById(id:string){
+        return this.httpClientService.get<ILog>(`${path}/${id}`)
+        .pipe(map( (log:ILog) =>{
+            return createLog(log);
+        }));
+    }
+
+    getLogBySet(id:string, date:string):Observable<ILog[]>{
+        return this.httpClientService.get<ILog[]>(`${path}/${id}/${date}`)
+        .pipe(map ( (logs:ILog[]) => {
+            return logs.map( log => createLog(log));
+        }));
     }
 
     updateLog(log:ISaveLog):Observable<ILog>{
-      return this.httpCleintService.put<ISaveLog>(`${path}/${log.logId}`, log);
+      return this.httpClientService.put<ISaveLog>(`${path}/${log.logId}`, log);
+    }
+
+    addLog(log:ISaveLog):Observable<ILog>{
+        return this.httpClientService.post<ISaveLog>(`${path}`, log);
+    }
+
+    deleteLog(id:number){
+        return this.httpClientService.delete(`${path}/${id}`);
     }
 }

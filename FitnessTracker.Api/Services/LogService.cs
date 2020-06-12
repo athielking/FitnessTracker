@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -28,11 +29,9 @@ namespace FitnessTracker.Services
             if(log.User == null)
                 throw new InvalidDataException("To create a Log you need a User");
             
-            if(_userRepository.GetById(log.User.Id) == null)
+            var user = _userRepository.GetById(log.User.Id);
+            if(user == null)
                 throw new InvalidDataException("User not found");
-
-            var exercise = _exerciseRepository.GetExerciseById(log.LogExercises.First().ExerciseId);
-            log.LogExercises.First().Exercise = exercise;
 
             return _logRepository.CreateLog(log);
         }
@@ -56,6 +55,12 @@ namespace FitnessTracker.Services
         {
             return _logRepository.GetLogsByUserName(username);
         }
+
+        public IEnumerable<Log> GetLogsBySet(int id, DateTime date)
+        {
+            return _logRepository.GetLogsBySet(id, date);
+        }
+
 
         public Log UpdateLog(Log log)
         {

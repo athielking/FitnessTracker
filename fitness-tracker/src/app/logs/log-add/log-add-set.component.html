@@ -9,8 +9,6 @@
         <b>{{log.exerciseName}}</b>
     </div>
     <div class="card-body">
-        <log-form [log]="log" (editEvent)="editLog($event)"></log-form>
+        <log-form [log]="log" (editEvent)="saveLog($event)"></log-form>
     </div>
 </div>
-
-

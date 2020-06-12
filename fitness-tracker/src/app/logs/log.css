@@ -2,7 +2,7 @@ label{font-weight: bold;}
 
 .col-width-short {width:100px; float:left}
 .col-width-med {width:200px; float:left}
-.col-width-long {min-width:365px; float:left}
+.col-width-long {width:365px; float:left}
 
 .log-list {
   display: -ms-flexbox;
@@ -30,4 +30,20 @@ label{font-weight: bold;}
 .log-list-row a:hover{
   color:white;
   background-color: gray;
+}
+
+.error{
+  color:red;
+}
+
+.btn-exercise{
+    border:none;
+    padding:2px;
+    background-color: none;
+    color:black
+}
+
+.btn-exercise:hover{
+    background-color: gray;
+    color:white
 }

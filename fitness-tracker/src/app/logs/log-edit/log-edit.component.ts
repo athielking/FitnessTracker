@@ -1,83 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
-import { ISaveLog, ILog, ISingleLog, ILogExercise } from '../log';
+import { ISaveLog, ILog, ISingleLog, createSingleLog, createSaveLog } from '../../shared/models/log';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { LogService } from '../log.service';
 
 @Component({
     templateUrl: './log-edit.component.html',
-    styleUrls: ['./log-edit.component.css']
+    styleUrls: ['../log.css']
   })
-  export class LogEditComponent implements OnInit {
+  export class LogEditComponent implements OnInit, OnDestroy {
 
     log:ISingleLog = undefined;
     errorMessage:string = ""
 
-    constructor(private route: ActivatedRoute, private logService:LogService) { }
+    private _onDestroy = new Subject();
+
+    constructor(private route: ActivatedRoute, private logService:LogService, private notifyService : NotificationService) { }
 
     ngOnInit(): void {
-        let id = this.route.snapshot.paramMap.get('id');
-        this.logService.getLogByid(id).subscribe({
-        next:(log:ILog) => {
-            this.log = this.parseLog(log)
-        },
-        error:err => this.errorMessage = err
+        let id:string = "";
+        this.route.paramMap.subscribe( (params: ParamMap) => {
+            id = params.get('id');
         })
+
+        if(id){
+            this.getLogById(id);
+        }
     }
 
-    parseLog(log:ILog):ISingleLog{
-        return this.createSingleLog(log, log.logExercises[0]);
-      }
     
-    createSingleLog(log:ILog, exerciseLog:ILogExercise) :ISingleLog {
-        let tmpLog:ISingleLog = {
-          logId : log.logId,
-          user : log.user,
-          set : log.set,
-          comments : log.comments,
-          created : log.created,
-          exerciseId : exerciseLog.exerciseId,
-          exerciseName : exerciseLog.exerciseName,
-          reps : exerciseLog.reps,
-          targetRep : exerciseLog.targetRep,
-          weight : exerciseLog.weight     
-        }
-    
-        return tmpLog;
+    ngOnDestroy(): void {
+        this._onDestroy.next();
+        this._onDestroy.complete();
     }
 
     editLog($event){
-        let log:ISaveLog = this.createSaveLog($event);
+        let log:ISaveLog = createSaveLog($event);
         this.logService.updateLog(log).subscribe( (data: ILog) =>{
-            console.log("update successful")
+            this.notifyService.showSuccess("Log was Updated");
         },
-            (error: any) => console.log(error)
+            (error: any) => {
+                console.log(error)
+                this.notifyService.showError("Failed to update log");
+            }
+
         )
     }
 
-    createSaveLog(log: ISingleLog) : ISaveLog{
-        const tmplog:ISaveLog = {
-            logId:log.logId,
-            user :log.user,
-            set:log.set, 
-            comments:log.comments, 
-            created:log.created,
-            logExercise: this.createLogExercise(log)
-        }
-
-        return tmplog;
+    private getLogById(id){
+        this.logService.getLogById(id).pipe(takeUntil(this._onDestroy)).subscribe({
+            next:(log:ILog) => {
+                this.log = this.parseLog(log)
+            },
+            error:err => this.errorMessage = err
+            })
     }
 
-    createLogExercise(log: ISingleLog):ILogExercise{
-        const tmpLogExercise:ILogExercise = {
-            logId : log.logId,
-            exerciseId : log.exerciseId,
-            exerciseName: log.exerciseName,
-            reps: log.reps,
-            weight: log.weight,
-            targetRep: log.targetRep
-        }
-
-        return tmpLogExercise
-    }
+    private parseLog(log:ILog):ISingleLog{
+        return createSingleLog(log, log.logExercises[0]);
+    }   
 }

@@ -18,12 +18,10 @@ namespace FitnessTracker.Data
         public DbSet<LogExercise> LogExercises { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<LogExercise>()
+        {           
+           modelBuilder.Entity<LogExercise>()
                 .HasKey(bc => new { bc.LogId, bc.ExerciseId });
-            modelBuilder.Entity<LogExercise>()
-                .HasIndex(bc => new { bc.LogId, bc.ExerciseId }).IsUnique(true);
-            modelBuilder.Entity<LogExercise>()
+           modelBuilder.Entity<LogExercise>()
                 .HasOne(bc => bc.Log)
                 .WithMany(b => b.LogExercises)
                 .HasForeignKey(bc => bc.LogId);

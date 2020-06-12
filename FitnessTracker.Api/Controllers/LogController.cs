@@ -42,6 +42,22 @@ namespace FitnessTracker.Controllers
 
         }
 
+        [HttpGet("{id}/{date}")]
+        public ActionResult<IEnumerable<LogDTO>> Get(int id, DateTime date)
+        {
+            try
+            {
+                var results = _logService.GetLogsBySet(id, date);
+                return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to get logs: {ex}");
+                return BadRequest("Failed to get logs");
+            }
+
+        }
+
         [HttpGet("{id:int}")]
         public ActionResult<LogDTO> Get(int id)
         {
@@ -118,30 +134,6 @@ namespace FitnessTracker.Controllers
             }
 
         }
-
-        //[HttpPut("{id}")]
-        //public ActionResult<LogDTO> Put(int id, [FromBody] LogDTO log)
-        //{
-        //    try
-        //    {
-        //        if (id < 1 || id != log.LogId)
-        //        {
-        //            return BadRequest("Unable to update Log");
-        //        }
-
-        //        var tmpLog = _mapper.Map<LogDTO, Log>(log);
-        //        var logUpdated = _logService.UpdateLog(tmpLog);
-        //        var results = _mapper.Map<Log, LogDTO>(logUpdated);
-
-        //        return Ok(results);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Failed to update log: {ex}");
-        //        return BadRequest("Failed to update log");
-        //    }
-
-        //}
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

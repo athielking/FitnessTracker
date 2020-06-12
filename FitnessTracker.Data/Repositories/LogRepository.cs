@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 using FitnessTracker.Core.Entities;
+using System;
 
 namespace FitnessTracker.Data.Repositories
 {
@@ -52,7 +53,7 @@ namespace FitnessTracker.Data.Repositories
                 .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
-                .Where(q => q.LogId == id).FirstOrDefault();
+                .FirstOrDefault(q => q.LogId == id);
         }
 
         public IEnumerable<Log> GetLogsByUserName(string username)
@@ -66,11 +67,22 @@ namespace FitnessTracker.Data.Repositories
                 .ToList();
         }
 
+        public IEnumerable<Log> GetLogsBySet(int id, DateTime date)
+        {
+            return _db.Logs
+                .AsNoTracking()
+                .Include(user => user.User)
+                .Include(logex => logex.LogExercises)
+                .ThenInclude(log => log.Exercise)
+                .Where(obj => obj.User.Id == id && obj.Created.Equals(date))
+                .ToList();
+        }
+
         public Log CreateLog(Log log)
         {
-            var logSaved = _db.Logs.Add(log).Entity;
+            _db.Attach(log).State = EntityState.Added;
             _db.SaveChanges();
-            return logSaved;
+            return log;
         }
 
         public int GetLogCount()

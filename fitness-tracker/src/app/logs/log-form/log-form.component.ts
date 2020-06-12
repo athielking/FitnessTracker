@@ -1,14 +1,29 @@
 import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { ILog, ISingleLog, ILogExercise, ISaveLog } from '../log';
+import { ISingleLog} from '../../shared/models/log';
 import { LogService } from '../log.service';
+
+let validationMessages = {
+    'set' :{
+        'required':'Set is required'
+    },
+    'weight' :{
+        'required':'Weight is required'
+    },
+    'reps' :{
+        'required':'Reps is required'
+    },
+    'targetRep' :{
+        'required':'Target Reps is required'
+    }
+}
 
 @Component({
     selector:'log-form',
     templateUrl: './log-form.component.html',
-    styleUrls: ['./log-form.component.css']
+    styleUrls: ['../log.css']
   })
   export class LogFormComponent implements OnInit, DoCheck {
     
@@ -17,9 +32,18 @@ import { LogService } from '../log.service';
 
     logForm:FormGroup  
 
+    date:string = "";
     errorMessage:string = "";
+    exerciseName:string = "";
 
     init:boolean;
+
+    formErrors = {
+        'set':'',
+        'weight':'',
+        'reps':'',
+        'targetRep':''
+    }
 
     constructor(private route: ActivatedRoute, private router: Router, private logService:LogService, private formBuilder: FormBuilder) { 
         this.init = false;
@@ -27,21 +51,27 @@ import { LogService } from '../log.service';
     
     ngOnInit(): void {
         this.initFormGroup();
+
+        this.logForm.valueChanges.subscribe((data) =>{
+            this.logValidationErros(this.logForm);
+        });
     }
 
     ngDoCheck(){
         if(this.log && !this.init){
             this.editLog(this.log);
             this.init = true;
+            this.exerciseName = this.log.exerciseName;
+            this.date = this.log.created;
         }
     }
 
     private initFormGroup(){
         this.logForm = this.formBuilder.group({
-            set:[''],
-            weight:[''],
-            reps:[''],
-            targetRep:['']
+            set:['', [Validators.required]],
+            weight:['', [Validators.required]],
+            reps:['', [Validators.required]],
+            targetRep:['', [Validators.required]]
         });
     }
 
@@ -54,9 +84,32 @@ import { LogService } from '../log.service';
         });
     }
 
+    logValidationErros(group: FormGroup = this.logForm): void{
+        Object.keys(group.controls).forEach((key:string) => {
+            const abstractControl = group.get(key);
+            if(abstractControl instanceof FormGroup){
+                this.logValidationErros(abstractControl);
+            }
+            else{
+                this.formErrors[key] = '';
+                if(abstractControl && !abstractControl.valid){
+                    const messages = validationMessages[key]; 
+                    console.log(messages);
+                    for (const errorKey in abstractControl.errors){
+                        this.formErrors[key] += messages[errorKey] + ' ';
+                    }
+                }
+            }
+        })
+    }
+
     onSubmit(){
         let updatedLog:ISingleLog = this.createSingleLog(this.log, this.logForm);
         this.editEvent.emit(updatedLog);
+    }
+
+    onBack(){
+        this.router.navigate(['/logs-edit', {id:this.log.logId, date:this.log.created}])    
     }
 
     createSingleLog(log:ISingleLog, logform:FormGroup) :ISingleLog {
@@ -76,5 +129,5 @@ import { LogService } from '../log.service';
         return tmpLog;
     }
 
-  }
+}
  

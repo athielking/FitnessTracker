@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using FitnessTracker.Core.Entities;
 
@@ -15,6 +16,8 @@ namespace FitnessTracker.Services
         Log GetLogById(int id);
 
         IEnumerable<Log> GetLogsByUserName(string username);
+
+        IEnumerable<Log> GetLogsBySet(int id, DateTime date);
 
         Log UpdateLog(Log log);
 
