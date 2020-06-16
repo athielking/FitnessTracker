@@ -3,6 +3,8 @@ namespace FitnessTracker.DTO
 {
     public class LogExerciseDTO
     {
+        public int LogId { get; set; }
+
         public int ExerciseId { get; set; }
 
         public string ExerciseName { get; set; }

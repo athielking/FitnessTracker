@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 
 using FitnessTracker.Core.Entities;
@@ -26,14 +27,15 @@ namespace FitnessTracker.Mapping
             Log log = new Log();
             log.User = user;
             log.UserId = user.Id;
+            log.Set = src.Set;
             log.Comments = src.Comments;
+            log.Created = src.Created;
+            log.Modified = DateTime.Now;
             log.LogExercises = new List<LogExercise>(lst);
 
             if (des != null)
-            {
-                des = log;
-                des.LogId = (int)src.LogId;
-                return des;
+            {               
+                log.LogId = (int)src.LogId;
             }
 
             return log;

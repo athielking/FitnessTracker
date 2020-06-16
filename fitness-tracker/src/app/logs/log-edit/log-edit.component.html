@@ -1,0 +1,16 @@
+<div *ngIf="log">
+    <div *ngIf="log">
+        <p>
+            {{log.created | date : "medium"}}
+        </p>
+    </div>
+    
+    <div class="card-header">
+        <b>{{log.exerciseName}}</b>
+    </div>
+    <div class="card-body">
+        <log-form [log]="log" (editEvent)="editLog($event)"></log-form>
+    </div>
+</div>
+
+

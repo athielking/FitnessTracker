@@ -2,6 +2,7 @@
 using System.Linq;
 
 using FitnessTracker.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Data.Repositories
 {
@@ -33,18 +34,20 @@ namespace FitnessTracker.Data.Repositories
 
         public IEnumerable<Exercise> GetAllExercises()
         {
-            return _db.Exercises.OrderBy(e => e.Name).ToList();
+            return _db.Exercises.AsNoTracking().OrderBy(e => e.Name).ToList();
         }
 
         public Exercise GetExerciseById(int id)
         {
             return _db.Exercises
+                .AsNoTracking()
                 .FirstOrDefault(ex => ex.ExerciseId == id);
         }
 
         public Exercise GetExerciseByName(string name)
         {
             return _db.Exercises
+                .AsNoTracking()
                 .FirstOrDefault(ex=> ex.Name.Equals(name));
         }
 

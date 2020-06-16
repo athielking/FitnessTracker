@@ -1,0 +1,24 @@
+<td (click)="isHidden = !isHidden">
+    <i [ngClass]="isHidden ? 'fa fa-plus-square':'fa fa-minus-square'"></i>
+</td>
+<td>{{log.created | date : "EEE, MMMM d, y"}}</td>  
+<td>{{log.created | date : "shortTime"}}</td>  
+
+<td [hidden]="isHidden" style="display:block; padding-left:50px">
+    <div *ngFor="let filteredLog of filteredLogs$ | async; index as i">
+        <b>{{filteredLog.set}}.</b> &nbsp; 
+        <div style="display:inline-block">
+            <div *ngFor="let exercise of filteredLog['logExercises']">
+            {{exercise.reps}} &nbsp; X &nbsp; {{exercise.weight}} lbs
+                <span style="padding-left:50px" >
+                    <button type="button" class="btn-exercise" (click)="edit(filteredLog.logId)">Edit</button>  | 
+                    <button type="button" class="btn-exercise" (click)="delete(filteredLog.logId)">Delete</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</td>
+
+
+
+

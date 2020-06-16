@@ -1,26 +1,40 @@
 import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { throwError, Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { throwError, Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpClientService{
-  
-  private _headers = new HttpHeaders();
-  
-  constructor(private http:HttpClient){
-    this._headers.set('Content-Type', 'application/json');
-  }
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
+  constructor(private http:HttpClient){}
 
   get<T>(path):Observable<T>{
     return this.http.get<T>(path).pipe(
-      //tap(data => console.log('allL ' + JSON.stringify(data))),
       catchError(this.handleError)
     );
   }
 
+  put<T>(path, obj:T): Observable<any>{
+    return this.http.put(path, obj, this.httpOptions)
+    .pipe(catchError(this.handleError))      
+  }
+
+  post<T>(path, obj:T): Observable<any>{
+    return this.http.post(path, obj, this.httpOptions)
+    .pipe(catchError(this.handleError))      
+  }
+
+  delete(path): Observable<any>{
+      return this.http.delete(path);
+  }
+  
   handleError(err: HttpErrorResponse){
     let errorMessage = '';
     if(err.error instanceof ErrorEvent){

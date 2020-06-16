@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using FitnessTracker.Core.Entities;
 
@@ -8,9 +9,11 @@ namespace FitnessTracker.Data.Repositories
     {
         IEnumerable<Log> GetAllLogs();
 
-        IEnumerable<Log> GetLogsByUserId(int id);
+        Log GetLogById(int id);
 
         IEnumerable<Log> GetLogsByUserName(string username);
+
+        IEnumerable<Log> GetLogsBySet(int id, DateTime date);
 
         Log CreateLog(Log log);
 
