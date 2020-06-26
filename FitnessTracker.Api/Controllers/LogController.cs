@@ -9,9 +9,11 @@ using AutoMapper;
 using FitnessTracker.DTO;
 using FitnessTracker.Core.Entities;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitnessTracker.Controllers
 {
+
     [Route("api/[Controller]")]
     public class LogController : Controller
     {

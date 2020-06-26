@@ -56,8 +56,8 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
-        public ActionResult<User> Get(int id)
+        [HttpGet("{id}")]
+        public ActionResult<User> GetById(string id)
         {
             try
             {
@@ -94,11 +94,11 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<UserDTO> Put(int id, [FromBody] UserDTO user)
+        public ActionResult<UserDTO> Put(string id, [FromBody] UserDTO user)
         {          
             try
             {
-                if (id < 1 || id != user.Id)
+                if (string.IsNullOrEmpty(id)  || !id.Equals(user.Id))
                 {
                     return BadRequest("Parameter Id and customer ID must be the same");
                 }
@@ -116,7 +116,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(string id)
         {
             try
             {

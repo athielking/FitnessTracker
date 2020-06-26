@@ -7,9 +7,6 @@ export interface IUser{
     username:string;
     firstName:string;
     lastName:string;
-    street:string;
-    city:string;
-    zip:string;
     phoneNumber:string;
     email:string;
 }
@@ -19,9 +16,6 @@ class User implements IUser{
     username: string;
     firstName: string;
     lastName: string;
-    street: string;
-    city: string;
-    zip: string;
     phoneNumber: string;
     email: string;
 

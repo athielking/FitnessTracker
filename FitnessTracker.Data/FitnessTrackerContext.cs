@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 using FitnessTracker.Core.Entities;
 using System.Linq;
 
 namespace FitnessTracker.Data
 {
-    public class FitnessTrackerContext : DbContext
+    public class FitnessTrackerContext : IdentityDbContext<User>
     {
         public FitnessTrackerContext(DbContextOptions<FitnessTrackerContext> options) : base(options) { }
 
@@ -18,7 +19,8 @@ namespace FitnessTracker.Data
         public DbSet<LogExercise> LogExercises { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {           
+        {
+           base.OnModelCreating(modelBuilder);
            modelBuilder.Entity<LogExercise>()
                 .HasKey(bc => new { bc.LogId, bc.ExerciseId });
            modelBuilder.Entity<LogExercise>()
