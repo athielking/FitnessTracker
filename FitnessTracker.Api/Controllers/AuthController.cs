@@ -16,6 +16,9 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using FitnessTracker.Api.Models;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Security.Claims;
 
 namespace FitnessTracker.Api.Controllers
 {
@@ -27,25 +30,33 @@ namespace FitnessTracker.Api.Controllers
         private readonly IConfiguration _config;        
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManger;
+        private readonly IMapper _mapper;
 
         public AuthController(
-            ILogger<AuthController> logger,IConfiguration config, UserManager<User> userManager, SignInManager<User> signInManger)
+            ILogger<AuthController> logger,IConfiguration config, UserManager<User> userManager, SignInManager<User> signInManger, IMapper mapper)
         {
             _config = config;
             _logger = logger;
             _userManager = userManager;
             _signInManger = signInManger;
+            _mapper = mapper;
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        public async Task<ActionResult<UserDTO>> Login([FromBody] LoginDTO model)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
             try
             {            
                 if(!ModelState.IsValid) return BadRequest(ModelState);
 
-                var result = await _signInManger.PasswordSignInAsync(model.Username, model.Password, model.RemberMe, false);
+                var tmpuser = new User()
+                {
+                    UserName = model.UserName
+                };
+
+                var result = await _signInManger.PasswordSignInAsync(model.UserName, model.Password, model.ReMemberMe, false);
+
 
                 if (!result.Succeeded) return BadRequest("Invalid Login attempt");
 
@@ -55,8 +66,9 @@ namespace FitnessTracker.Api.Controllers
                     _config["JwtIssuer"]
                 );
 
-                var user = await _userManager.FindByNameAsync(model.Username);
+                var user = await _userManager.FindByNameAsync(model.UserName);
                 var token = tokenManager.GenerateJwtToken(user);
+
                 return Ok(token);
             }
             catch (Exception ex)
@@ -76,8 +88,8 @@ namespace FitnessTracker.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to logout: {ex}");
-                return BadRequest("Failed to logout");
+                _logger.LogError($"Failed to logout user: {ex}");
+                return BadRequest("Failed to logout user");
             }
         }
 
@@ -93,26 +105,35 @@ namespace FitnessTracker.Api.Controllers
                 if (user != null)
                     return BadRequest("Username is already being used");
 
-                user = new User
-                {
-                    UserName = model.Username,
-                    Email = model.Email
-                };
-
-                var result = await  _userManager.CreateAsync(user, model.Password);
-                
+                user = _mapper.Map<User>(model);
+                user.PasswordHash = string.Empty;
+                var result = await _userManager.CreateAsync(user, model.Password);            
                 if (!result.Succeeded)
                 {
                     var err = result.Errors.ToList();
                     return BadRequest(new {errors=err});
                 }
-
+                //await _userManager.AddToRoleAsync(user, "user");
                 return Ok();
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed to Register User: {ex}");
                 return BadRequest(new { errorMessage = "Failed to Register User" });
+            }
+        }
+
+        [HttpPost("ResetPassword")]
+        public IActionResult ResetPassword(ResetPasswordDTO model)
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to Sign in User: {ex}");
+                return BadRequest(new { errorMessage = "Failed to Sign in User" });
             }
         }
 

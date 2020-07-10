@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace FitnessTracker.Api.DTO
 {
-    public class LoginDTO
+    public class ResetPasswordDTO
     {
         [Required]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
-        public bool ReMemberMe { get; set; } = false;
     }
 }

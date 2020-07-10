@@ -1,0 +1,39 @@
+<form [formGroup]="registerForm" >
+    <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" class="form-control" formControlName = "firstName" placeholder="Enter First Name" (blur)="logValidationErrors()">
+        <span class="error" *ngIf="formErrors.firstName">{{formErrors.firstName}}</span>
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" class="form-control" formControlName = "lastName" placeholder="Enter Last Name" (blur)="logValidationErrors()">
+        <span class="error" *ngIf="formErrors.lastName">{{formErrors.lastName}}</span>
+    </div>
+    <div class="form-group">
+        <label for="email">Email Address:</label>
+        <input type="email" class="form-control" formControlName = "email" placeholder="Enter Email Address"  
+            (blur)="logValidationErrors()">
+        <span class="error" *ngIf="formErrors.email">{{formErrors.email}}</span>
+    </div>
+    <div class="form-group">
+        <label for="userName">Username:</label>
+        <input type="text" class="form-control" formControlName = "userName" placeholder="Enter Username" 
+            (blur)="logValidationErrors()">
+        <span class="error" *ngIf="formErrors.userName">{{formErrors.userName}}</span>
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" formControlName = "password" placeholder="Enter Password" 
+            (blur)="logValidationErrors()">
+        <span class="error" *ngIf="formErrors.password">{{formErrors.password}}</span>
+    </div>
+    <div class="form-group">
+        <label for="reEnterPassword">ReEnter Password:</label>
+        <input type="password" class="form-control" formControlName = "reEnterPassword" placeholder="Enter ReEnter Password" 
+            (blur)="logValidationErrors()">
+        <span class="error" *ngIf="formErrors.reEnterPassword">{{formErrors.reEnterPassword}}</span>
+    </div>
+    <p>
+        <button [hidden]="registerForm.invalid" (click)="onSubmit()" [disabled]="registerForm.invalid">Register</button>
+    </p>
+</form>

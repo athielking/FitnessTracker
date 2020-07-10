@@ -1,4 +1,5 @@
-﻿using FitnessTracker.Core.Entities;
+﻿using FitnessTracker.Api.Models;
+using FitnessTracker.Core.Entities;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace FitnessTracker.Data.Managers
             _jwtIssuer = jwtIssuer;
         }
 
-        public string GenerateJwtToken(User user)
+        public JWTToken GenerateJwtToken(User user)
         {
             var claims = new List<Claim>
             {
@@ -42,7 +43,12 @@ namespace FitnessTracker.Data.Managers
                 signingCredentials: creds
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JWTToken()
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                UserName = user.UserName,
+                Expiration = token.ValidTo
+            };
         }
     }
 }

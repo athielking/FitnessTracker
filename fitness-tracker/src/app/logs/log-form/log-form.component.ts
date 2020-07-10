@@ -33,7 +33,6 @@ let validationMessages = {
     logForm:FormGroup  
 
     date:string = "";
-    errorMessage:string = "";
     exerciseName:string = "";
 
     init:boolean;

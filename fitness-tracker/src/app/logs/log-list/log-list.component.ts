@@ -52,7 +52,7 @@ export class LogListComponent implements OnInit, OnDestroy {
         this.filter$ = this.logForm.get('logFilter').valueChanges.pipe(startWith(''));
 
         this.filteredLogs$ = combineLatest(this.logs$, this.filter$).pipe(takeUntil(this._onDestroy$),
-            map(([logs, filterString]) => logs.filter(log => log.user.username.toLowerCase().indexOf
+            map(([logs, filterString]) => logs.filter(log => log.user.userName.toLowerCase().indexOf
             (filterString.toLowerCase()) !== -1 && (log.set == 1)))
         );
 
@@ -67,7 +67,7 @@ export class LogListComponent implements OnInit, OnDestroy {
                   return logs
                 return logs.filter(
                     (log: ILog) => {
-                      log.user.username.toLowerCase() === filter.toLowerCase() && (log.set == 1)
+                      log.user.userName.toLowerCase() === filter.toLowerCase() && (log.set == 1)
                     }
                 )
             }

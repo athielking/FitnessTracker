@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.EquivalencyExpression;
+using FitnessTracker.Api.DTO;
 using FitnessTracker.Core.Entities;
 using FitnessTracker.DTO;
 
@@ -9,6 +10,9 @@ namespace FitnessTracker.Mapping
     {
         public LogProfile()
         {
+
+
+
             CreateMap<Log, LogDTO>(MemberList.None);
             CreateMap<Log, LogDTO>(MemberList.None).ReverseMap();
 
@@ -22,7 +26,7 @@ namespace FitnessTracker.Mapping
             CreateMap<Exercise, ExerciseDTO>(MemberList.None).ReverseMap();
 
             CreateMap<SaveLogDTO, Log>().ConvertUsing<AddToListResolver>();
-
+            CreateMap<RegisterDTO, User>();
         }
     }
 }
