@@ -55,7 +55,9 @@ namespace FitnessTracker.Api.Controllers
                     UserName = model.UserName
                 };
 
-                var result = await _signInManger.PasswordSignInAsync(model.UserName, model.Password, model.ReMemberMe, false);
+                var user = await _userManager.FindByNameAsync(model.UserName);
+
+                var result = await _signInManger.PasswordSignInAsync(user, model.Password, model.ReMemberMe, false);
 
 
                 if (!result.Succeeded) return BadRequest("Invalid Login attempt");
@@ -66,7 +68,6 @@ namespace FitnessTracker.Api.Controllers
                     _config["JwtIssuer"]
                 );
 
-                var user = await _userManager.FindByNameAsync(model.UserName);
                 var token = tokenManager.GenerateJwtToken(user);
 
                 return Ok(token);
@@ -105,8 +106,14 @@ namespace FitnessTracker.Api.Controllers
                 if (user != null)
                     return BadRequest("Username is already being used");
 
-                user = _mapper.Map<User>(model);
-                user.PasswordHash = string.Empty;
+                user = new User()
+                {
+                    UserName = model.Username,
+                    Email = model.Email
+                };
+
+                //user = _mapper.Map<User>(model);
+                ///user.PasswordHash = string.Empty;
                 var result = await _userManager.CreateAsync(user, model.Password);            
                 if (!result.Succeeded)
                 {
