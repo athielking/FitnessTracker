@@ -31,7 +31,7 @@ export class UserListComponent implements OnInit, OnDestroy{
         this.filter$ = this.userForm.get('userFilter').valueChanges.pipe(startWith(''));
   
         this.filteredUsers$ = combineLatest(this.users$, this.filter$).pipe(takeUntil(this._onDestroy$),
-            map(([users, filterString]) => users.filter(user => user.username.toLowerCase().indexOf
+            map(([users, filterString]) => users.filter(user => user.userName.toLowerCase().indexOf
             (filterString.toLowerCase()) !== -1 ))
         );
     }
@@ -42,7 +42,7 @@ export class UserListComponent implements OnInit, OnDestroy{
     }
 
     userLogs(user:IUser){
-        this.route.navigate(['/logs-user', user.username])
+        this.route.navigate(['/logs-user', user.userName])
     }
 
     private initFormGroup(){

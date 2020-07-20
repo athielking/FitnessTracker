@@ -30,10 +30,10 @@ export class UserService{
     }
 
     updateLog(user:IUser):Observable<IUser>{
-      return this.httpClientService.put<IUser>(`${path}/${user.id}`, user);
+      return this.httpClientService.put<IUser>(`${path}/${user.userName}`, user);
     }
 
-    deleteUser(id:number){
-        return this.httpClientService.delete(`${path}/${id}`);
+    deleteUser(userName:string){
+        return this.httpClientService.delete(`${path}/${userName}`);
     }
 }

@@ -15,18 +15,18 @@ namespace FitnessTracker.Data.Repositories
             _db = db;
         }
 
-        public User GetById(int id)
+        public User GetById(string id)
         {
             return _db.User
                .AsNoTracking()
-               .FirstOrDefault(c => c.Id == id);
+               .FirstOrDefault(c => c.Id.Equals(id));
         }
 
         public User GetByUsername(string username)
         {
             return _db.User
                .AsNoTracking()
-               .FirstOrDefault(c => c.Username.Equals(username));
+               .FirstOrDefault(c => c.UserName.Equals(username));
         }
 
         public User GetByUsernameWithAllLogs(string username)
@@ -34,7 +34,7 @@ namespace FitnessTracker.Data.Repositories
             return _db.User
                .AsNoTracking()
                .Include( u => u.Logs)
-               .FirstOrDefault(c => c.Username.Equals(username));
+               .FirstOrDefault(c => c.UserName.Equals(username));
         }
 
         public IEnumerable<User> GetAllUsers()
@@ -60,7 +60,7 @@ namespace FitnessTracker.Data.Repositories
             return user;
         }
 
-        public User Delete(int id)
+        public User Delete(string id)
         {
             var user = GetById(id);
             if ( user == null) return null;

@@ -63,7 +63,7 @@ namespace FitnessTracker.Data.Repositories
                 .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
-                .Where( q => q.User.Username.Equals(username))
+                .Where( q => q.User.UserName.Equals(username))
                 .ToList();
         }
 
@@ -74,7 +74,7 @@ namespace FitnessTracker.Data.Repositories
                 .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
-                .Where(obj => obj.User.Id == id && obj.Created.Equals(date))
+                .Where(obj => obj.User.Id.Equals(id) && obj.Created.Equals(date))
                 .ToList();
         }
 

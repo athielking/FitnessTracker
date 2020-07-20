@@ -23,4 +23,6 @@ export class LogStore{
                 next:logs => this._logList.next(logs)  
             }))
     }
+
+    
 }

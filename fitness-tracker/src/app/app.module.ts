@@ -3,6 +3,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JwtModule } from "@auth0/angular-jwt";
 
 import { AppComponent } from "./app.component";
 import { HttpClientModule } from '@angular/common/http';
@@ -10,6 +11,7 @@ import { WelcomeComponent } from './home/welcome.component';
 import { LogsModule } from './logs/logs.module';
 import { ToastrModule } from 'ngx-toastr';
 import { UsersModule } from './users/users.module';
+import { getToken } from './users/user.store';
 
 const appRoute: Routes = [
     {path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule)},
@@ -33,8 +35,14 @@ const appRoute: Routes = [
     UsersModule,
     LogsModule,
     ToastrModule.forRoot(), 
-    RouterModule.forRoot(appRoute)
-
+    RouterModule.forRoot(appRoute),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: getToken,
+        whitelistedDomains: ["localhost:5001"],
+        blacklistedRoutes: []
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

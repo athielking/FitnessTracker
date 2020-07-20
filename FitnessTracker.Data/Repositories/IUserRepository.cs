@@ -8,7 +8,7 @@ namespace FitnessTracker.Data.Repositories
     {
         IEnumerable<User> GetAllUsers();        
         
-        User GetById(int id);
+        User GetById(string id);
 
         User GetByUsername(string username);
 
@@ -18,7 +18,7 @@ namespace FitnessTracker.Data.Repositories
 
         User Update(User userUpdate);
 
-        User Delete(int id);
+        User Delete(string id);
 
         int Count();
     }

@@ -1,0 +1,22 @@
+
+<form [formGroup]="loginForm"  (ngSubmit)="login()">
+  <div class="container-fluid">
+    <h2 class="form-signin-heading">Login</h2>
+    <div class="alert alert-danger">Invalid username or password.</div>
+    <br/>
+    <div class="form-group">
+      <label for="userName">Username:</label>
+      <input type="text" class="form-control" formControlName = "userName" placeholder="Enter Username">
+      <span class="error" *ngIf="formErrors.userName">{{formErrors.userName}}</span>
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" class="form-control" formControlName = "password" placeholder="Enter Password">
+      <span class="error" *ngIf="formErrors.password">{{formErrors.password}}</span>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <p>
+      <button >Sign in</button>
+    </p>
+    </div>
+</form>
