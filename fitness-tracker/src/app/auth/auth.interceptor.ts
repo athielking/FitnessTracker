@@ -36,33 +36,39 @@ export class AuthInterceptor implements HttpInterceptor {
     }*/
 
     
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     
     const idToken = this.authStore.getToken();
 
-        if (idToken) {
-            const cloned = req.clone({
-                setHeaders:{"Authorization" : `Bearer " ${idToken}`}
-            })
+    const request = req.clone({
+      headers: req.headers.append('Authorization', `Bearer ${idToken}`)
+    });
 
-            req = cloned;
-        }
+    return next.handle(request);
+
+    //     if (idToken) {
+    //         const cloned = req.clone({
+    //             setHeaders:{"Authorization" : `Bearer " ${idToken}`}
+    //         })
+
+    //         req = cloned;
+    //     }
  
-    return next.handle(req)
-      .pipe(
-        retry(1),
-        catchError((error: HttpErrorResponse) => {
-          let errorMessage = '';
-          if (error.error instanceof ErrorEvent) {
-            // client-side error
-            errorMessage = `Error: ${error.error.message}`;
-          } else {
-            // server-side error
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-          }
-          window.alert(errorMessage);
-          return throwError(errorMessage);
-        })
-      )
+    // return next.handle(req)
+    //   .pipe(
+    //     retry(1),
+    //     catchError((error: HttpErrorResponse) => {
+    //       let errorMessage = '';
+    //       if (error.error instanceof ErrorEvent) {
+    //         // client-side error
+    //         errorMessage = `Error: ${error.error.message}`;
+    //       } else {
+    //         // server-side error
+    //         errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    //       }
+    //       window.alert(errorMessage);
+    //       return throwError(errorMessage);
+    //     })
+    //   )
   }
 }
