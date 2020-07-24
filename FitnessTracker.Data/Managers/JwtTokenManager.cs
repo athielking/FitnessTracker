@@ -46,7 +46,7 @@ namespace FitnessTracker.Data.Managers
             return new JWTToken()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                UserName = user.UserName,
+                UserName = user.Id,
                 Expiration = token.ValidTo
             };
         }

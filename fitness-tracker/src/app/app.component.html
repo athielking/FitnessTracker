@@ -2,12 +2,15 @@
   <a class='navbar-brand'>{{title}}</a>
   <ul class='nav nav-pills'>
     <li><a class='nav-link' [routerLink]="['/welcome']">Home</a></li>
-    <li><a class='nav-link' [routerLink]="['/users']">User List</a></li>
-    <li><a class='nav-link' [routerLink]="['/logs']">Log List</a></li>
+    <li ><a class='nav-link' [routerLink]="['/users']">User List</a></li>
+    <li *ngIf="(authorized$ | async)"><a class='nav-link' [routerLink]="['/logs']">Log List</a></li>
   </ul>
-  <ul class='nav nav-pills ml-auto'>
+  <ul class='nav nav-pills ml-auto' *ngIf="!(authorized$ | async)">
     <li><a class='nav-link' [routerLink]="['/register']">Register</a></li>
     <li><a class='nav-link' [routerLink]="['/login']">Login in</a></li>
+  </ul>
+  <ul class='nav nav-pills ml-auto' *ngIf="(authorized$ | async)">
+    <li><a class='nav-link' [routerLink]="['/login']">Log out</a></li>
   </ul>
 </nav>
 <div class='container container-main'>

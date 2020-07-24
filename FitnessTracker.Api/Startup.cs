@@ -23,12 +23,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using FitnessTracker.Api.Extenisons;
+using FitnessTracker.Api.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FitnessTracker
 {
     public class Startup
     {
-        private readonly string _allowOrigins = "_myAllowSpecificOrigins"; 
+        private readonly string _allowOrigins = "_myAllowSpecificOrigins";
 
         private IConfiguration _config;
 
@@ -40,16 +44,22 @@ namespace FitnessTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddCors(options =>
-            {
-                options.AddPolicy(name: _allowOrigins,
-                 builder =>
-                 {
-                     builder.WithOrigins("http://localhost:4200")
-                     .WithHeaders(HeaderNames.ContentType, "application/json")
-                     .WithMethods("PUT", "DELETE", "GET");
-                 });
-            });
+                        {
+                            options.AddPolicy(name: _allowOrigins,
+                             builder =>
+                             {
+                                 builder.WithOrigins("http://localhost:4200/")
+
+                                 //.WithHeaders(HeaderNames.ContentType, "application/json")
+                                 .AllowAnyHeader()
+                                 //.SetIsOriginAllowed((host) => true)
+
+                                 .AllowCredentials()
+                                 .AllowAnyMethod();
+                             });
+                        });
 
             services.AddDbContext<FitnessTrackerContext>(config =>
             {
@@ -97,6 +107,7 @@ namespace FitnessTracker
             services.AddTransient<ILogService, LogService>();
 
             services.AddControllers();
+
             services.AddMvc(option => {
                 option.EnableEndpointRouting = false;
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -112,9 +123,15 @@ namespace FitnessTracker
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAuthorization();
+
             app.UseHttpsRedirection();
-            app.UseCors(_allowOrigins);
+
+            app.UseCors();
+
+            app.UseAuthorization();
+
+
+
             app.UseMvc();
         }
     }
