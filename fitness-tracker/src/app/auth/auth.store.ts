@@ -42,7 +42,7 @@ export class AuthStore{
     }
 
     public login(account){
-        this.authService.login(account)
+        return this.authService.login(account)
         .pipe(tap({
             next:(response:IJWTToken) => {
                 this.setUser(response.userID);

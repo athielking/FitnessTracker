@@ -10,7 +10,8 @@ import { catchError, map } from 'rxjs/operators';
 export class HttpClientService{
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
+    //headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
+    headers: new HttpHeaders({ 'Content-Type': 'application/json'})
   };
 
   constructor(private http:HttpClient){}

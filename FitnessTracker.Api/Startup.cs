@@ -46,20 +46,21 @@ namespace FitnessTracker
         {
 
             services.AddCors(options =>
-                        {
-                            options.AddPolicy(name: _allowOrigins,
-                             builder =>
-                             {
-                                 builder.WithOrigins("http://localhost:4200/")
+            {
+                options.AddPolicy(_allowOrigins,
+                 builder =>
+                 {
+                     builder.WithOrigins("http://localhost:4200")
 
-                                 //.WithHeaders(HeaderNames.ContentType, "application/json")
-                                 .AllowAnyHeader()
-                                 //.SetIsOriginAllowed((host) => true)
+                     //.WithHeaders(HeaderNames.ContentType, "application/json")
+                     .AllowAnyHeader()
+                     //.SetIsOriginAllowed((host) => true)
 
-                                 .AllowCredentials()
-                                 .AllowAnyMethod();
-                             });
-                        });
+                     .AllowCredentials()
+                     //.WithMethods("PUT", "DELETE", "GET");
+                     .AllowAnyMethod();
+                 });
+            });
 
             services.AddDbContext<FitnessTrackerContext>(config =>
             {
@@ -118,20 +119,16 @@ namespace FitnessTracker
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(_allowOrigins);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-
             app.UseHttpsRedirection();
-
             app.UseCors();
-
             app.UseAuthorization();
-
-
-
             app.UseMvc();
         }
     }
