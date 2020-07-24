@@ -31,7 +31,7 @@ export class AuthAccountLoginComponent implements OnInit{
     login(){
         if(this.loginForm.invalid) return
 
-        this.authStore.login(this.loginForm.value);
+        this.authStore.login(this.loginForm.value).subscribe();
     }
 
     private initFormGroup(){

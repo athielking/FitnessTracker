@@ -47,10 +47,10 @@ namespace FitnessTracker
 
             services.AddCors(options =>
                         {
-                            options.AddPolicy(name: _allowOrigins,
+                            options.AddPolicy(_allowOrigins,
                              builder =>
                              {
-                                 builder.WithOrigins("http://localhost:4200/")
+                                 builder.WithOrigins("http://localhost:4200")
 
                                  //.WithHeaders(HeaderNames.ContentType, "application/json")
                                  .AllowAnyHeader()
@@ -118,6 +118,8 @@ namespace FitnessTracker
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(_allowOrigins);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
