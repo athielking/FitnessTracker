@@ -31,8 +31,8 @@ let validationMessages = {
     }
 }
 @Component({
-    templateUrl: './user-account-register.component.html',
-        styleUrls: ['../user.css']
+    templateUrl: './auth-account-register.component.html',
+        styleUrls: ['../auth.css']
     })
 
 export class AuthAccountRegisterComponent implements OnInit{

@@ -50,22 +50,29 @@ namespace FitnessTracker
                 options.AddPolicy(_allowOrigins,
                  builder =>
                  {
-                     builder.WithOrigins("http://localhost:4200")
+                     builder.WithOrigins(_config["clienturl"].ToString())
 
                      //.WithHeaders(HeaderNames.ContentType, "application/json")
                      .AllowAnyHeader()
                      //.SetIsOriginAllowed((host) => true)
 
-                     .AllowCredentials()
+                     //.AllowCredentials()
                      //.WithMethods("PUT", "DELETE", "GET");
                      .AllowAnyMethod();
                  });
             });
 
+            //services.AddCors();
+
             services.AddDbContext<FitnessTrackerContext>(config =>
             {
                 config.UseSqlServer(_config.GetConnectionString("FitnesssTrackerConn"), opt => opt.MigrationsAssembly("FitnessTracker.Api"))
                 .EnableSensitiveDataLogging();
+            });
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AutomaticAuthentication = false;
             });
 
             services.AddIdentity<User, IdentityRole>(options => {
@@ -92,6 +99,7 @@ namespace FitnessTracker
                     cfg.SaveToken = true;
                     cfg.TokenValidationParameters = new TokenValidationParameters
                     {
+                        ValidateIssuerSigningKey = true,
                         ValidIssuer = _config["JwtIssuer"],
                         ValidAudience = _config["JwtIssuer"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtKey"])),
@@ -126,9 +134,7 @@ namespace FitnessTracker
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-            app.UseCors();
-            app.UseAuthorization();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

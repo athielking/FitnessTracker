@@ -28,8 +28,8 @@ export class HttpClientService{
   }
 
   post<T>(path, obj:T): Observable<any>{
-    return this.http.post(path, obj, this.httpOptions);
-    //.pipe(catchError(this.handleError))    
+    return this.http.post(path, obj, this.httpOptions)
+    .pipe(catchError(this.handleError))    
   }
 
   delete(path): Observable<any>{

@@ -5,6 +5,7 @@ import { ILog, ISaveLog} from "../shared/models/log"
 import { Observable, BehaviorSubject } from 'rxjs'
 import { map, tap, takeUntil } from 'rxjs/operators'
 import { LogService } from './log.service';
+import { IExercise } from '../shared/models/exercise';
 
 export class LogStore{
     
@@ -14,7 +15,7 @@ export class LogStore{
     private _getLog: BehaviorSubject<ILog> = new BehaviorSubject(null);
     public log$: Observable<ILog> = this._getLog.asObservable();
 
-    constructor(private logService:LogService){}
+    constructor(private logService:LogService, private exerciseService){}
 
     public getLogs(){
         //this._logsLoading.next()
@@ -24,5 +25,4 @@ export class LogStore{
             }))
     }
 
-    
 }

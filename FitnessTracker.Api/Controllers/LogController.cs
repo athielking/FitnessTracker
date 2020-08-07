@@ -99,6 +99,8 @@ namespace FitnessTracker.Controllers
         {
             try
             {
+                if(log == null) return NotFound();
+
                 var newLog = _mapper.Map<SaveLogDTO, Log>(log);
 
                 var logCreated = _logService.CreateLog(newLog);

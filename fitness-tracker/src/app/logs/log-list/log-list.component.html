@@ -13,7 +13,7 @@
         <table class="table table-striped">  
             <thead>  
                 <tr>  
-                    <th>Logs</th>  
+                    <th>Logs</th><th *ngIf="(filteredLogs$ | async)?.length==0"><button type="button" class="btn btn-success mr-1" [routerLink]="['/log-create']">Create Set</button></th>
                 </tr>  
             </thead>  
             <tbody>  

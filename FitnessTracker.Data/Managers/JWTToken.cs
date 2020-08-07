@@ -8,7 +8,7 @@ namespace FitnessTracker.Api.Models
     public class JWTToken
     {
         public string Token { get; set; }
-        public string UserName { get; set; }
+        public string UserID { get; set; }
         public DateTime Expiration { get; set; }
     }
 }

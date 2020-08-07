@@ -119,7 +119,7 @@ class SingleLog implements ISingleLog{
     weight: number;
     targetRep: number;
     
-    constructor(log:ILog, logExercise:ILogExercise){
+    constructor(log?:ILog, logExercise?:ILogExercise){
         if(log){
           Object.assign(this, log);
         }

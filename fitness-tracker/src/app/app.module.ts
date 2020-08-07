@@ -19,11 +19,13 @@ import { AuthAccountLoginComponent } from './auth/auth-account/auth-account-logi
 import { HttpClientService } from './core/services/httpclient.service';
 import {environment} from '../environments/environment'
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { AuthAccountRegisterComponent } from './auth/auth-account/auth-account-register.component';
 
 const appRoute: Routes = [
     {path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule), canLoad: [AuthGuard]},
     {path: 'logs', loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule), canLoad: [AuthGuard]},
     {path: 'login', component: AuthAccountLoginComponent},
+    {path: 'register', component: AuthAccountRegisterComponent},
     {path: 'welcome', component: WelcomeComponent},
     {path: '', redirectTo: 'welcome', pathMatch: 'full'},
     {path: '**', redirectTo: 'welcome', pathMatch: 'full'}
@@ -33,6 +35,7 @@ const appRoute: Routes = [
   declarations: [
     AppComponent,
     AuthAccountLoginComponent,
+    AuthAccountRegisterComponent,
     WelcomeComponent
   ],
   imports: [

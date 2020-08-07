@@ -77,7 +77,7 @@ namespace FitnessTracker.Api.Controllers
             }
         }
 
-        [HttpPost("logout")]
+        [HttpPost("Logout")]
         public async Task<IActionResult> Logout()
         {
             try
@@ -124,7 +124,7 @@ namespace FitnessTracker.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Failed to Register User: {ex}");
-                return BadRequest(new { errorMessage = "Failed to Register User" });
+                return BadRequest(ex.StackTrace);
             }
         }
 

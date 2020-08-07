@@ -5,14 +5,13 @@ import { shareReplay } from 'rxjs/operators';
 import { IUserAccount } from 'src/app/shared/models/user';
 import { IResetPassword } from '../shared/models/security';
 
-const path:string = "http://FitnessTracker.Api/api/auth"
+const path:string = "http://localhost/FitnessTracker.Api/api/auth"
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService{
     
-    auth0 : any;
     user:IUserAccount;
 
     token:string;
@@ -22,11 +21,11 @@ export class AuthService{
 
     login(account){
         account.reMemberMe = false;
-        return this.httpClientService.post(`${path}/Login`, account);
+        return this.httpClientService.post(`${path}/Login`, account).pipe(shareReplay());
     }
 
     logout(){
-        return this.httpClientService.get(`${path}/Logout`).pipe(shareReplay());
+        return this.httpClientService.post(`${path}/Logout`, {}).pipe(shareReplay());
     }
 
     forgotUsername(account){

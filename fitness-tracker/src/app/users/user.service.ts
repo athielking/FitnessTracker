@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs'
 import { map, tap, takeUntil } from 'rxjs/operators'
 import { IUser, createUser } from '../shared/models/user'
 
-const path:string = "http://localhost:5001/api/user"
+const path:string = "http://localhost/FitnessTracker.Api/api/user"
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +23,7 @@ export class UserService{
     }
 
     getUserById(id:string){
-        return this.httpClientService.get<IUser>(`${path}/${id}`)
+        return this.httpClientService.get<IUser>(`${path}/GetById/${id}`)
         .pipe(map( (log:IUser) =>{
             return createUser(log);
         }))

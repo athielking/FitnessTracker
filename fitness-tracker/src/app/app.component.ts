@@ -18,11 +18,16 @@ export class AppComponent  implements OnInit{
 
   constructor(private authStore:AuthStore){
       this.authorized$ = this.authStore.isLoggedIn$;
+      var x = 0;
   }
 
   ngOnInit(): void {
       this.authStore.loggedInUser$.subscribe(user =>{
           this.loggedInUser = user && user.userName ? user.userName : ""
       })
+  }
+
+  logout(){
+    this.authStore.logout();
   }
 }
