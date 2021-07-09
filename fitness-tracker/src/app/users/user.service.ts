@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs'
 import { map, tap, takeUntil } from 'rxjs/operators'
 import { IUser, createUser } from '../shared/models/user'
 
-const path:string = "http://localhost/FitnessTracker.Api/api/user"
+const path:string = "https://localhost:5001/api/user"
 
 @Injectable({
     providedIn: 'root'

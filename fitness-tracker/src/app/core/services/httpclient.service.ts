@@ -2,6 +2,9 @@ import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { throwError, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { IExercise } from 'src/app/shared/models/exercise';
+import { createSaveLog, ILogExercise, ISaveLog, ISingleLog } from 'src/app/shared/models/log';
+import { IUser } from 'src/app/shared/models/user';
 
 
 @Injectable({
@@ -46,4 +49,20 @@ export class HttpClientService{
     console.error(errorMessage);
     return throwError(errorMessage);
   }
+
+  createSingleLog(user:IUser) {
+    let tmpLog = {
+      user : user,
+      set : 1,
+      comments : '',
+      created : '',
+      exerciseId : '',
+      exerciseName : '',
+      reps : 0,
+      targetRep : 0,
+      weight : 0    
+    }
+
+    return tmpLog;
+}
 }

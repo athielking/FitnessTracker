@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  whitelistedDomains: ["localhost:5001"]
+  whitelistedDomains: ["localhost:5000"]
 };
 
 /*

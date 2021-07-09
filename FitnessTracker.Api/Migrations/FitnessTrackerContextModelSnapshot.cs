@@ -53,6 +53,9 @@ namespace FitnessTracker.Api.Migrations
                     b.Property<int>("Set")
                         .HasColumnType("int");
 
+                    b.Property<string>("SetId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 

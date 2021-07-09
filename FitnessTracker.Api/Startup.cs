@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 using FitnessTracker.Api.Extenisons;
 using FitnessTracker.Api.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Server.IISIntegration;
 
 namespace FitnessTracker
 {
@@ -50,17 +51,13 @@ namespace FitnessTracker
                 options.AddPolicy(_allowOrigins,
                  builder =>
                  {
-                     builder.WithOrigins(_config["clienturl"].ToString())
-
-                     //.WithHeaders(HeaderNames.ContentType, "application/json")
-                     .AllowAnyHeader()
-                     //.SetIsOriginAllowed((host) => true)
-
-                     //.AllowCredentials()
-                     //.WithMethods("PUT", "DELETE", "GET");
-                     .AllowAnyMethod();
+                     builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                  });
             });
+
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
 
             //services.AddCors();
 
@@ -134,7 +131,11 @@ namespace FitnessTracker
                 app.UseDeveloperExceptionPage();
             }
 
+
+            app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseMvc();
         }
     }

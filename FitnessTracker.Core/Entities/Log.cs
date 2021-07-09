@@ -14,6 +14,8 @@ namespace FitnessTracker.Core.Entities
 
         public int Set { get; set; }
 
+        public string SetId { get; set; }
+
         public string Comments { get; set; }
 
         public DateTime Created { get; set; }

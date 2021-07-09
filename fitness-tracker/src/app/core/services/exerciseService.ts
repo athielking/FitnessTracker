@@ -4,7 +4,7 @@ import { shareReplay, map } from 'rxjs/operators';
 import { IExercise, createExercise } from 'src/app/shared/models/exercise';
 
 
-const path:string = "http://localhost/FitnessTracker.Api/api/exercise"
+const path:string = "https://localhost:5001/api/exercise"
 
 @Injectable({
     providedIn: 'root'

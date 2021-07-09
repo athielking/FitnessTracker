@@ -45,7 +45,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{id}/{date}")]
-        public ActionResult<IEnumerable<LogDTO>> Get(int id, DateTime date)
+        public ActionResult<IEnumerable<LogDTO>> Get(string id, DateTime date)
         {
             try
             {
@@ -94,6 +94,7 @@ namespace FitnessTracker.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Post([FromBody]SaveLogDTO log)
         {

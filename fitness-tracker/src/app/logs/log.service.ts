@@ -5,7 +5,7 @@ import { map, shareReplay } from 'rxjs/operators'
 import { HttpClientService } from '../core/services/httpclient.service'
 import { ILog, ISaveLog, createLog} from "../shared/models/log"
 
-const path:string = "http://localhost/FitnessTracker.Api/api/log"
+const path:string = "https://localhost:5001/api/log"
 
 @Injectable({
     providedIn: 'root'

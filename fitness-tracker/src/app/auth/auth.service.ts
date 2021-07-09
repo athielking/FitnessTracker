@@ -5,7 +5,7 @@ import { shareReplay } from 'rxjs/operators';
 import { IUserAccount } from 'src/app/shared/models/user';
 import { IResetPassword } from '../shared/models/security';
 
-const path:string = "http://localhost/FitnessTracker.Api/api/auth"
+const path:string = "https://localhost:5001/api/auth"
 
 @Injectable({
     providedIn: 'root'

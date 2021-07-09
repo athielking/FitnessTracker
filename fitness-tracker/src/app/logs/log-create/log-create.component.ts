@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { UUID } from 'angular2-uuid';
 
 import { LogService } from '../log.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
@@ -33,6 +34,8 @@ export class LogCreateComponent implements OnInit, OnDestroy{
     logCreatedOn:string
     exercise:IExercise;
 
+    date:string;
+
     private _onDestroy$ = new Subject();
     
     constructor(
@@ -48,8 +51,7 @@ export class LogCreateComponent implements OnInit, OnDestroy{
     
     ngOnInit(): void {
         this.authStore.loggedInUser$.subscribe(user => {
-            this.log = this.createSingleLog(user)
-            this.log.created = new Date().toString()
+            this.log = this.createSingleLog(user);
         })
         
         //this.exercises$ = this.exerciseStore.getExercises();
@@ -77,6 +79,8 @@ export class LogCreateComponent implements OnInit, OnDestroy{
     saveLog(e){
         if(Number(this.log.exerciseId) > 0){
             let log:ISaveLog = createSaveLog(e);
+            log.created = new Date().toLocaleString();
+
             var exercise = this.exerciseStore.getExercise(this.log.exerciseId)
             log.logExercise.exerciseId = exercise.exerciseId;
             log.logExercise.exerciseName = exercise.name;
@@ -98,8 +102,9 @@ export class LogCreateComponent implements OnInit, OnDestroy{
           logId : undefined,
           user : user,
           set : 1,
+          setId:UUID.UUID(),
           comments : '',
-          created : '',
+          created : new Date().toString(),
           exerciseId : '',
           exerciseName : '',
           reps : 0,
