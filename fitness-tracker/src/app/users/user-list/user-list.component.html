@@ -1,7 +1,7 @@
 <div class="card-footer">  
     <form [formGroup]="userForm">
         <div class="row">
-            <div class="col-md-1">Filter by:</div>
+            <div class="col-md-2">Filter by:</div>
             <div class="col-md-4">
                 <input type="text" formControlName = "userFilter"/>
             </div>
@@ -16,7 +16,7 @@
               </thead>  
               <tbody>  
                   <tr class="userTr" *ngFor="let user of filteredUsers$ | async" (click)=userLogs(user)>
-                      <td>{{user.username}}</td>
+                      <td>{{user.userName}}</td>
                       <td>{{user.firstName}} {{user.lastName}}</td>
                   </tr>  
               </tbody>  

@@ -43,11 +43,7 @@ export class LogListComponent implements OnInit, OnDestroy {
         })
 
         this.initFormGroup();
-        this.logs$ = this.logService.getLogs();
-
-        /*this.logs$ = this.logService.getLogs().pipe( map( (logs:ILog[]) => {
-          return logs.filter(log => log.user.username.toLowerCase() === name && log.set == 1 )
-        }));*/
+        this.logs$ = this.logService.getLogs()
         
         this.filter$ = this.logForm.get('logFilter').valueChanges.pipe(startWith(''));
 
@@ -57,21 +53,6 @@ export class LogListComponent implements OnInit, OnDestroy {
         );
 
         this.updateFilter(name);
-    }
-
-    private createLogList(logs$, filter$, username$){
-        return combineLatest(
-            logs$,
-            filter$, (logs: ILog[], filter:string) =>{
-                if(username$ = '') 
-                  return logs
-                return logs.filter(
-                    (log: ILog) => {
-                      log.user.userName.toLowerCase() === filter.toLowerCase() && (log.set == 1)
-                    }
-                )
-            }
-        )
     }
 
     updateFilter(username:string){

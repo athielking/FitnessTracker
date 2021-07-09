@@ -8,6 +8,7 @@ using FitnessTracker.Data.Repositories;
 using AutoMapper;
 using FitnessTracker.DTO;
 using FitnessTracker.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitnessTracker.Controllers
 {
@@ -56,8 +57,8 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<User> GetById(string id)
+        [HttpGet("GetById/{id}")]
+        public ActionResult<UserDTO> GetByUserId(string id)
         {
             try
             {

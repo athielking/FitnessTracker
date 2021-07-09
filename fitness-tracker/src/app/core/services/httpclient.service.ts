@@ -2,6 +2,9 @@ import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { throwError, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { IExercise } from 'src/app/shared/models/exercise';
+import { createSaveLog, ILogExercise, ISaveLog, ISingleLog } from 'src/app/shared/models/log';
+import { IUser } from 'src/app/shared/models/user';
 
 
 @Injectable({
@@ -10,7 +13,8 @@ import { catchError, map } from 'rxjs/operators';
 export class HttpClientService{
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    //headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
+    headers: new HttpHeaders({ 'Content-Type': 'application/json'})
   };
 
   constructor(private http:HttpClient){}
@@ -28,7 +32,7 @@ export class HttpClientService{
 
   post<T>(path, obj:T): Observable<any>{
     return this.http.post(path, obj, this.httpOptions)
-    .pipe(catchError(this.handleError))      
+    .pipe(catchError(this.handleError))    
   }
 
   delete(path): Observable<any>{
@@ -45,4 +49,20 @@ export class HttpClientService{
     console.error(errorMessage);
     return throwError(errorMessage);
   }
+
+  createSingleLog(user:IUser) {
+    let tmpLog = {
+      user : user,
+      set : 1,
+      comments : '',
+      created : '',
+      exerciseId : '',
+      exerciseName : '',
+      reps : 0,
+      targetRep : 0,
+      weight : 0    
+    }
+
+    return tmpLog;
+}
 }

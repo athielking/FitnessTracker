@@ -1,0 +1,24 @@
+<div>
+    <div>
+        <p>
+            {{log.created | date : "medium"}}
+        </p>
+    </div>
+    
+    <div class="card-header">
+        <form [formGroup] = "exerciseForm">
+            <label>Exercise:</label>
+            <select  class="form-control" formControlName = "exerciseType">
+                <option>Select Exercise</option>
+                <option *ngFor="let exercise of exercises" [value]="exercise.exerciseId">{{exercise.name}}</option>
+            </select>
+        </form>
+    </div>
+    <div *ngIf="exerciseType.invalid && exerciseForm.dirty" class="error">
+        Exercise required.
+    </div>
+
+    <div class="card-body">
+        <log-form [log]="log" (editEvent)="saveLog($event)"></log-form>
+    </div>
+</div>

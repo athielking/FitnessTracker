@@ -56,7 +56,7 @@ namespace FitnessTracker.Services
             return _logRepository.GetLogsByUserName(username);
         }
 
-        public IEnumerable<Log> GetLogsBySet(int id, DateTime date)
+        public IEnumerable<Log> GetLogsBySet(string id, DateTime date)
         {
             return _logRepository.GetLogsBySet(id, date);
         }

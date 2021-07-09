@@ -29,7 +29,7 @@ namespace FitnessTracker.Mapping
             log.UserId = user.Id;
             log.Set = src.Set;
             log.Comments = src.Comments;
-            log.Created = src.Created;
+            log.Created = DateTime.Parse(src.Created);
             log.Modified = DateTime.Now;
             log.LogExercises = new List<LogExercise>(lst);
 

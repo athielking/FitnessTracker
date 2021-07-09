@@ -116,6 +116,7 @@ let validationMessages = {
           logId : log.logId,
           user : log.user,
           set : logform.value.set,
+          setId : log.setId,
           comments : log.comments,
           created : log.created,
           exerciseId : log.exerciseId,

@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core"
 import { Observable, BehaviorSubject } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, shareReplay } from 'rxjs/operators'
 
 import { HttpClientService } from '../core/services/httpclient.service'
 import { ILog, ISaveLog, createLog} from "../shared/models/log"
 
-const path:string = "http://localhost:5001/api/log"
+const path:string = "https://localhost:5001/api/log"
 
 @Injectable({
     providedIn: 'root'
@@ -42,15 +42,19 @@ export class LogService{
         }));
     }
 
+    createLog(log:ISaveLog):Observable<ILog[]>{
+        return this.httpClientService.post<ISaveLog>(`${path}`, log).pipe(shareReplay())
+    }
+
     updateLog(log:ISaveLog):Observable<ILog>{
-      return this.httpClientService.put<ISaveLog>(`${path}/${log.logId}`, log);
+      return this.httpClientService.put<ISaveLog>(`${path}/${log.logId}`, log).pipe(shareReplay())
     }
 
     addLog(log:ISaveLog):Observable<ILog>{
-        return this.httpClientService.post<ISaveLog>(`${path}`, log);
+        return this.httpClientService.post<ISaveLog>(`${path}`, log).pipe(shareReplay())
     }
 
     deleteLog(id:number){
-        return this.httpClientService.delete(`${path}/${id}`);
+        return this.httpClientService.delete(`${path}/${id}`).pipe(shareReplay())
     }
 }

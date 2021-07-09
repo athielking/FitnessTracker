@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { UserStore } from '../user.store';
 import { IUserAccount } from 'src/app/shared/models/user';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { propertyLengthGuard, passwordGuard, confirmedValidator } from 'src/app/shared/custom-validators';
+import { AuthStore } from '../auth.store';
 
 let validationMessages = {
     'firstName':{
@@ -31,11 +31,11 @@ let validationMessages = {
     }
 }
 @Component({
-    templateUrl: './user-account-register.component.html',
-        styleUrls: ['../user.css']
+    templateUrl: './auth-account-register.component.html',
+        styleUrls: ['../auth.css']
     })
 
-export class UserAccountRegisterComponent implements OnInit{
+export class AuthAccountRegisterComponent implements OnInit{
   
     registerForm:FormGroup  
   
@@ -48,7 +48,7 @@ export class UserAccountRegisterComponent implements OnInit{
         'reEnterPassword':''
     }
 
-    constructor(private router: Router, private formBuilder: FormBuilder, private userStore: UserStore, private notifyService : NotificationService){
+    constructor(private router: Router, private formBuilder: FormBuilder, private authStore: AuthStore, private notifyService : NotificationService){
 
     }
 
@@ -100,7 +100,7 @@ export class UserAccountRegisterComponent implements OnInit{
         if(this.registerForm.invalid) return
       
         const userAccount:IUserAccount = this.createUserAccount(this.registerForm)
-        this.userStore.register(userAccount).subscribe( 
+        this.authStore.register(userAccount).subscribe( 
             () => {
                 this.router.navigate(['/login']);
             },

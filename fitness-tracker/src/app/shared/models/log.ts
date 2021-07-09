@@ -13,7 +13,8 @@ export interface ILogExercise{
 export interface ILog{
     logId:number;
     user:IUser;
-    set:number;  
+    set:number; 
+    setId:string; 
     comments:string;  
     created:string; 
     logExercises:ILogExercise[]
@@ -23,6 +24,7 @@ export interface ISingleLog{
     logId:number;
     user:IUser;
     set:number;  
+    setId:string; 
     comments:string;  
     created:string; 
     exerciseId;
@@ -49,7 +51,7 @@ export function createSingleLog(log?:ILog, logExercise?:ILogExercise) {
   return new SingleLog(log, logExercise);
 }
 
-export function createSaveLog(log?: ISingleLog) {
+export function createSaveLog(log?: ISaveLog) {
   return new SaveLog(log);
 }
 
@@ -61,6 +63,7 @@ class Log implements ILog{
     logId: number;
     user: IUser;
     set: number;
+    setId:string;
     comments: string;
     created: string;
     logExercises: ILogExercise[];
@@ -88,22 +91,36 @@ class LogExercise implements ILogExercise{
 }
 
 class SaveLog implements ISaveLog{
-    logId: number;
-    user: IUser;
-    set: number;
     comments: string;
     created: string;
-    logExercise: ILogExercise;
-  
+    logExercise: ILogExercise;        
+    logId: number;
+    set: number;    
+    user: IUser;
+
     constructor(log){
         if(log){
+            this.comments = log.comments;   
+            this.created = log.created;   
+            this.logExercise =  this.mapLogExercise(log);    
+            this.set = log.set;     
+            this.user = log.user;                                            
             this.logId = log.logId;
-            this.user = log.user;
-            this.set = log.set; 
-            this.comments = log.comments;
-            this.created = log.created;
-            this.logExercise =  new LogExercise(log);
         }
+    }
+
+    mapLogExercise(log) : ILogExercise {
+        
+        const tmp:ILogExercise = {
+            logId: log.logId,
+            exerciseId: log.exerciseId,
+            exerciseName: log.exerciseName,
+            reps: log.reps,
+            targetRep: log.targetRep,           
+            weight: log.weight,
+        }
+        
+        return tmp;
     }
 }
 
@@ -111,6 +128,7 @@ class SingleLog implements ISingleLog{
     logId: number;
     user: IUser;
     set: number;
+    setId:string;
     comments: string;
     created: string;
     exerciseId: any;
@@ -119,7 +137,7 @@ class SingleLog implements ISingleLog{
     weight: number;
     targetRep: number;
     
-    constructor(log:ILog, logExercise:ILogExercise){
+    constructor(log?:ILog, logExercise?:ILogExercise){
         if(log){
           Object.assign(this, log);
         }
