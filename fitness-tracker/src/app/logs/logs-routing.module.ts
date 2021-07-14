@@ -4,9 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { LogListComponent } from './log-list/log-list.component';
 import { LogEditComponent } from './log-edit/log-edit.component';
 import { LogAddSetComponent } from './log-add/log-add-set.component';
+import { LogCreateComponent } from './log-create/log-create.component';
 
 const logRoutes: Routes = [
     {path: 'logs', component: LogListComponent},
+    {path: 'log-create', component: LogCreateComponent},
     {path: 'logs-edit/:id/:date', component: LogEditComponent},    
     {path: 'logs-edit/:id', component: LogEditComponent},
     {path: 'logs-user/:name', component: LogListComponent},

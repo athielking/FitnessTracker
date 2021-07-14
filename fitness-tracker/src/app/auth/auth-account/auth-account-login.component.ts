@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserStore } from '../user.store';
+
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { createUserAccount } from 'src/app/shared/models/user';
+import { AuthStore } from '../auth.store';
 
 @Component({
-    templateUrl: './user-account-login.component.html',
-    styleUrls: ['../user.css']
+    templateUrl: './auth-account-login.component.html',
+    styleUrls: ['../auth.css']
 })
-export class UserAccountLoginComponent implements OnInit{
+export class AuthAccountLoginComponent implements OnInit{
 
     loginForm:FormGroup  
 
@@ -18,10 +18,11 @@ export class UserAccountLoginComponent implements OnInit{
         'password':'',
     }
 
-  
-    constructor(private router: Router, private formBuilder: FormBuilder, private userStore: UserStore, private notifyService : NotificationService){
-
-    }
+    constructor(
+      private router: Router, 
+      private formBuilder: FormBuilder, 
+      private authStore: AuthStore, 
+      private notifyService : NotificationService){}
 
     ngOnInit(): void {
         this.initFormGroup();
@@ -30,7 +31,14 @@ export class UserAccountLoginComponent implements OnInit{
     login(){
         if(this.loginForm.invalid) return
 
-        this.userStore.login(this.loginForm.value);
+        this.authStore.login(this.loginForm.value)
+            .subscribe( () => 
+              {this.loginCallback()}
+            );
+    }
+
+    private loginCallback(){
+      this.router.navigateByUrl('/users');
     }
 
     private initFormGroup(){

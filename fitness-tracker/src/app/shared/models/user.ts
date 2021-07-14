@@ -1,15 +1,4 @@
 
-export interface IResetPassword{
-    userName:string,
-    password:string
-}
-
-export interface IJWTToken{
-    token:string;
-    userName:string;
-    expiration:string;
-}
-
 export function createUser(user:IUser):User{
     return new User(user);
 }

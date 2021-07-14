@@ -17,7 +17,7 @@ namespace FitnessTracker.Services
 
         IEnumerable<Log> GetLogsByUserName(string username);
 
-        IEnumerable<Log> GetLogsBySet(int id, DateTime date);
+        IEnumerable<Log> GetLogsBySet(string id, DateTime date);
 
         Log UpdateLog(Log log);
 

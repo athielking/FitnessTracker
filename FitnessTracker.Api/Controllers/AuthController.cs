@@ -19,6 +19,7 @@ using System.Linq;
 using FitnessTracker.Api.Models;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Cors;
 
 namespace FitnessTracker.Api.Controllers
 {
@@ -50,13 +51,10 @@ namespace FitnessTracker.Api.Controllers
             {            
                 if(!ModelState.IsValid) return BadRequest(ModelState);
 
-                var tmpuser = new User()
-                {
-                    UserName = model.UserName
-                };
-
                 var user = await _userManager.FindByNameAsync(model.UserName);
 
+                if (user == null) return BadRequest();
+                
                 var result = await _signInManger.PasswordSignInAsync(user, model.Password, model.ReMemberMe, false);
 
 
@@ -79,7 +77,7 @@ namespace FitnessTracker.Api.Controllers
             }
         }
 
-        [HttpPost("logout")]
+        [HttpPost("Logout")]
         public async Task<IActionResult> Logout()
         {
             try
@@ -126,7 +124,7 @@ namespace FitnessTracker.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Failed to Register User: {ex}");
-                return BadRequest(new { errorMessage = "Failed to Register User" });
+                return BadRequest(ex.StackTrace);
             }
         }
 

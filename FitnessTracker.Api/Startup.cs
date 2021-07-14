@@ -23,12 +23,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using FitnessTracker.Api.Extenisons;
+using FitnessTracker.Api.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Server.IISIntegration;
 
 namespace FitnessTracker
 {
     public class Startup
     {
-        private readonly string _allowOrigins = "_myAllowSpecificOrigins"; 
+        private readonly string _allowOrigins = "_myAllowSpecificOrigins";
 
         private IConfiguration _config;
 
@@ -40,21 +45,31 @@ namespace FitnessTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddCors(options =>
             {
-                options.AddPolicy(name: _allowOrigins,
+                options.AddPolicy(_allowOrigins,
                  builder =>
                  {
                      builder.WithOrigins("http://localhost:4200")
-                     .WithHeaders(HeaderNames.ContentType, "application/json")
-                     .WithMethods("PUT", "DELETE", "GET");
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                  });
             });
+
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
+
+            //services.AddCors();
 
             services.AddDbContext<FitnessTrackerContext>(config =>
             {
                 config.UseSqlServer(_config.GetConnectionString("FitnesssTrackerConn"), opt => opt.MigrationsAssembly("FitnessTracker.Api"))
                 .EnableSensitiveDataLogging();
+            });
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AutomaticAuthentication = false;
             });
 
             services.AddIdentity<User, IdentityRole>(options => {
@@ -81,6 +96,7 @@ namespace FitnessTracker
                     cfg.SaveToken = true;
                     cfg.TokenValidationParameters = new TokenValidationParameters
                     {
+                        ValidateIssuerSigningKey = true,
                         ValidIssuer = _config["JwtIssuer"],
                         ValidAudience = _config["JwtIssuer"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtKey"])),
@@ -97,6 +113,7 @@ namespace FitnessTracker
             services.AddTransient<ILogService, LogService>();
 
             services.AddControllers();
+
             services.AddMvc(option => {
                 option.EnableEndpointRouting = false;
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -107,14 +124,18 @@ namespace FitnessTracker
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(_allowOrigins);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAuthorization();
+
             app.UseHttpsRedirection();
-            app.UseCors(_allowOrigins);
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseMvc();
         }
     }

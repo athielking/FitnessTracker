@@ -67,14 +67,14 @@ namespace FitnessTracker.Data.Repositories
                 .ToList();
         }
 
-        public IEnumerable<Log> GetLogsBySet(int id, DateTime date)
+        public IEnumerable<Log> GetLogsBySet(string id, DateTime date)
         {
             return _db.Logs
                 .AsNoTracking()
                 .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
-                .Where(obj => obj.User.Id.Equals(id) && obj.Created.Equals(date))
+                .Where(obj => obj.SetId == id)
                 .ToList();
         }
 

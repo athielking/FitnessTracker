@@ -10,6 +10,7 @@ import { LogEditComponent } from './log-edit/log-edit.component';
 import { LogFormComponent } from './log-form/log-form.component';
 import { LogDetailComponent } from './log-detail/log-detail.component';
 import { LogAddSetComponent } from './log-add/log-add-set.component';
+import { LogCreateComponent } from './log-create/log-create.component';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { LogAddSetComponent } from './log-add/log-add-set.component';
         LogFormComponent,  
         LogDetailComponent,           
         LogEditComponent,
-        LogAddSetComponent
+        LogAddSetComponent,
+        LogCreateComponent
     ],
     imports: [
         CommonModule,

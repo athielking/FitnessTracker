@@ -35,7 +35,7 @@ export class LogDetailComponent implements OnInit, OnDestroy{
           date = date ? date : this.log.created;
       })
       
-      this.filteredLogs$ = this.logService.getLogBySet(id, date);
+      this.filteredLogs$ = this.logService.getLogBySet(this.log.setId, date);
     }
 
     ngOnDestroy(): void {

@@ -45,7 +45,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{id}/{date}")]
-        public ActionResult<IEnumerable<LogDTO>> Get(int id, DateTime date)
+        public ActionResult<IEnumerable<LogDTO>> Get(string id, DateTime date)
         {
             try
             {
@@ -94,11 +94,14 @@ namespace FitnessTracker.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Post([FromBody]SaveLogDTO log)
         {
             try
             {
+                if(log == null) return NotFound();
+
                 var newLog = _mapper.Map<SaveLogDTO, Log>(log);
 
                 var logCreated = _logService.CreateLog(newLog);

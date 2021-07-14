@@ -71,6 +71,7 @@ export class LogAddSetComponent implements OnInit, OnDestroy{
             logId: undefined,
             user: log.user,
             set: log.set + 1,
+            setId: log.setId,
             comments: log.comments,
             created: log.created,
             exerciseId: logExercises.exerciseId,
