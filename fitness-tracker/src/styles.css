@@ -5,3 +5,7 @@
 .error{
     color:red;
   }
+
+html { background-color: #FFF; }
+
+.card > .card-header{background:#999; color:#FFF; font-size:x-large}

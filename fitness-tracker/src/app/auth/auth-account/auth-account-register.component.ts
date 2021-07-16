@@ -48,6 +48,8 @@ export class AuthAccountRegisterComponent implements OnInit{
         'reEnterPassword':''
     }
 
+    pageTitle = 'Register';
+
     constructor(private router: Router, private formBuilder: FormBuilder, private authStore: AuthStore, private notifyService : NotificationService){
 
     }

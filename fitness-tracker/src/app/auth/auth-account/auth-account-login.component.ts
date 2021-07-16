@@ -18,6 +18,8 @@ export class AuthAccountLoginComponent implements OnInit{
         'password':'',
     }
 
+    pageTitle = 'Login';
+
     constructor(
       private router: Router, 
       private formBuilder: FormBuilder, 
