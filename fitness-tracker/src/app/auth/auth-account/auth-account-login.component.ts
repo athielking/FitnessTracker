@@ -40,7 +40,7 @@ export class AuthAccountLoginComponent implements OnInit{
     }
 
     private loginCallback(){
-      this.router.navigateByUrl('/users');
+      this.router.navigateByUrl('/');
     }
 
     private initFormGroup(){
