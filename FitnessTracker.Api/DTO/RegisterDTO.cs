@@ -11,11 +11,14 @@ namespace FitnessTracker.Api.DTO
         [Required]
         public string Username { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Email is required.")]
         public string Email { get; set; }
 
         public string FirstName { get; set; }
