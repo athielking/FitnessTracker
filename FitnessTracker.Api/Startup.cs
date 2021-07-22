@@ -66,7 +66,7 @@ namespace FitnessTracker
 
             services.AddDbContext<FitnessTrackerContext>(config =>
             {
-                config.UseSqlServer(_config.GetConnectionString("FitnesssTrackerConn"), opt => opt.MigrationsAssembly("FitnessTracker.Data"))
+                config.UseSqlServer(_config.GetConnectionString("FitnesssTrackerConn"), opt => opt.MigrationsAssembly("FitnessTracker.Api"))
                 .EnableSensitiveDataLogging();
             });
 

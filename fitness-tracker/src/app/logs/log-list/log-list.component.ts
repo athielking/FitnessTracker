@@ -6,6 +6,8 @@ import { Observable, combineLatest, Subject, of } from 'rxjs';
 import { map, startWith, takeUntil, filter } from 'rxjs/operators';
 
 import { ActivatedRoute, Params, ParamMap, Router } from '@angular/router';
+import { AuthStore } from "src/app/auth";
+import { IUser } from "src/app/shared/models/user";
 
 @Component({
   templateUrl: "./log-list.component.html",
@@ -16,6 +18,8 @@ export class LogListComponent implements OnInit, OnDestroy {
     logs$: Observable<ILog[]>  
     filteredLogs$: Observable<ILog[]>
     filter$: Observable<string> 
+
+    user:IUser;
     
     filter:FormControl
     logForm:FormGroup
@@ -26,7 +30,7 @@ export class LogListComponent implements OnInit, OnDestroy {
 
     private _onDestroy$ = new Subject();
 
-    constructor(private logService:LogService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private route: Router) { }
+    constructor(private authStore: AuthStore, private logService:LogService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private route: Router) { }
 
     ngOnDestroy(): void {
         if(this._onDestroy$){
@@ -37,13 +41,12 @@ export class LogListComponent implements OnInit, OnDestroy {
 
     ngOnInit(){
 
-        let name = "";
-        this.activatedRoute.paramMap.subscribe( (params: ParamMap) =>{
-            name = params.get('name')
+        this.authStore.loggedInUser$.subscribe((user:IUser) =>{
+          this.user = user;
         })
 
         this.initFormGroup();
-        this.logs$ = this.logService.getLogs()
+        this.logs$ = this.logService.getUserLogs(this.user.id)
         
         this.filter$ = this.logForm.get('logFilter').valueChanges.pipe(startWith(''));
 
@@ -52,7 +55,7 @@ export class LogListComponent implements OnInit, OnDestroy {
             (filterString.toLowerCase()) !== -1 && (log.set == 1)))
         );
 
-        this.updateFilter(name);
+        this.updateFilter(this.user.userName);
     }
 
     updateFilter(username:string){

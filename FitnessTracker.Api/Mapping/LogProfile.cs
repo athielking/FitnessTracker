@@ -19,6 +19,9 @@ namespace FitnessTracker.Mapping
             CreateMap<User, UserDTO>();
             CreateMap<User, UserDTO>().ReverseMap();
 
+            CreateMap<Workout, WorkoutDTO>();
+            CreateMap<Workout, WorkoutDTO>().ReverseMap();
+
             CreateMap<LogExercise, LogExerciseDTO>(MemberList.None);
             CreateMap<LogExercise, LogExerciseDTO>(MemberList.None).ReverseMap();
 

@@ -28,6 +28,17 @@ namespace FitnessTracker.Data.Repositories
                 .ToList();
         }
 
+        public IEnumerable<Log> GetAllLogs(string id)
+        {
+            return _db.Logs
+                .AsNoTracking()
+                .Include(logex => logex.LogExercises)
+                .ThenInclude(log => log.Exercise)
+                .Include(user => user.User)
+                .Where(user => user.UserId.Equals(id))
+                .ToList();
+        }
+
         public Log GetLastRecord()
         {
             var x = _db.Logs.OrderByDescending(q => q.LogId).Take(1);

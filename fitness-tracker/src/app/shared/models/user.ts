@@ -8,6 +8,7 @@ export function createUserAccount(userAccount:IUserAccount):UserAccountImpl{
 }
 
 export interface IUser{
+    id?:string;
     userName:string;
     firstName?:string;
     lastName?:string;

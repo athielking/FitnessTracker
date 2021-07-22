@@ -44,6 +44,22 @@ namespace FitnessTracker.Controllers
 
         }
 
+        [HttpGet("GetUserLogs/{id}")]
+        public ActionResult<IEnumerable<LogDTO>> GetUserLogs(string id)
+        {
+            try
+            {
+                var results = _logService.GetAllLogs(id);
+                return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to get logs: {ex}");
+                return BadRequest("Failed to get logs");
+            }
+
+        }
+
         [HttpGet("{id}/{date}")]
         public ActionResult<IEnumerable<LogDTO>> Get(string id, DateTime date)
         {

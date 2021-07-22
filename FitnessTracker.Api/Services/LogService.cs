@@ -46,6 +46,11 @@ namespace FitnessTracker.Services
             return _logRepository.GetAllLogs();
         }
 
+        public IEnumerable<Log> GetAllLogs(string id)
+        {
+            return _logRepository.GetAllLogs(id);
+        }
+
         public Log GetLogById(int id)
         {
             return _logRepository.GetLogById(id);

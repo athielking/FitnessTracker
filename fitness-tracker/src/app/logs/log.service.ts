@@ -28,6 +28,13 @@ export class LogService{
         }));
     }
 
+    getUserLogs(id:string):Observable<ILog[]>{
+        return this.httpClientService.get<ILog[]>(`${path}/GetUserLogs/${id}`)
+        .pipe(map( (logs:ILog[]) =>{
+            return logs.map( log => createLog(log))
+        }));
+    }
+
     getLogById(id:string){
         return this.httpClientService.get<ILog>(`${path}/${id}`)
         .pipe(map( (log:ILog) =>{
