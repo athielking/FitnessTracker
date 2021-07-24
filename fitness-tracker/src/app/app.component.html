@@ -2,7 +2,6 @@
   <a class='navbar-brand'><b>{{title}}</b></a>
   <ul class='nav nav-pills'>
     <li><a class='nav-link' [routerLink]="['/welcome']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
-    <li *ngIf="(authorized$ | async)"><a class='nav-link' [routerLink]="['/users']">User List</a></li>
     <li *ngIf="(authorized$ | async)"><a class='nav-link' [routerLink]="['/logs']">Log List</a></li>
   </ul>
   <ul class='nav nav-pills ml-auto' *ngIf="!(authorized$ | async)">
