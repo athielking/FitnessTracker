@@ -17,6 +17,7 @@ export interface IUser{
 
 export interface IUserAccount extends IUser {
     password:string;
+    confirmPassword?: string;
     reMemberMe?:boolean;
 }
 
