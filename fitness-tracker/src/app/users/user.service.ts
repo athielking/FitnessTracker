@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core"
 import { HttpClientService } from '../core/services/httpclient.service'
 import { Observable, BehaviorSubject } from 'rxjs'
 import { map, tap, takeUntil } from 'rxjs/operators'
-import { IUser, createUser } from '../shared/models/user'
+import { IUser, User } from '../shared/models/user'
 
 const path:string = "https://localhost:5001/api/user"
 
@@ -18,14 +18,14 @@ export class UserService{
     getUsers():Observable<IUser[]>{
         return this.httpClientService.get<IUser[]>(path)
         .pipe(map( (users:IUser[]) =>{
-            return users.map(user => createUser(user))
+            return users.map(user => new User(user))
         }))
     }
 
     getUserById(id:string){
         return this.httpClientService.get<IUser>(`${path}/GetById/${id}`)
         .pipe(map( (log:IUser) =>{
-            return createUser(log);
+            return new User(log);
         }))
     }
 

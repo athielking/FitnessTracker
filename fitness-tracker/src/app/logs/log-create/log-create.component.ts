@@ -9,7 +9,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { ILog, ILogExercise, ISaveLog, ISingleLog, createSaveLog, createSingleLog, } from 'src/app/shared/models/log';
 import { IExercise } from 'src/app/shared/models/exercise';
 import { AuthStore } from 'src/app/auth';
-import { createUser, IUser } from 'src/app/shared/models/user';
+import { IUser } from 'src/app/shared/models/user';
 import { ExerciseStore } from 'src/app/shared/stores/exerciseStore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
