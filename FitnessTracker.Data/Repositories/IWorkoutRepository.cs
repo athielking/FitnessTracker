@@ -9,13 +9,11 @@ namespace FitnessTracker.Data.Repositories
     {
         Workout Create(Workout workout);
 
-        Workout Delete(string id);
+        Workout Delete(string userId, string id);
 
-        IEnumerable<Workout> GetAllWorkouts();
+        IEnumerable<Workout> GetAllWorkouts(string userId);
 
-        Workout GetWorkoutById(string id);
-
-        Workout GetWorkoutByName(string name);
+        Workout GetWorkoutById(string userId, string id);
 
         int Count();
 

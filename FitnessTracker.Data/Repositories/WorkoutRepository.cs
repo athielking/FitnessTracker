@@ -22,9 +22,9 @@ namespace FitnessTracker.Data.Repositories
             return workoutSaved;
         }
 
-        public Workout Delete(string id)
+        public Workout Delete(string userId, string id)
         {
-            var workout = GetWorkoutById(id);
+            var workout = GetWorkoutById(userId, id);
             if (workout == null) return null;
             
             var results = _db.Remove(workout).Entity;
@@ -32,25 +32,22 @@ namespace FitnessTracker.Data.Repositories
             return results;
         }
 
-        public IEnumerable<Workout> GetAllWorkouts()
+        public IEnumerable<Workout> GetAllWorkouts(string userId)
         {
-            return _db.Workouts.AsNoTracking().OrderBy(e => e.Name).ToList();
+            return _db.Workouts.AsNoTracking()
+                .Include(x => x.Logs)
+                .ThenInclude(x => x.UserId.Equals(userId))
+                .ToList();
         }
 
-        public Workout GetWorkoutById(string id)
+        public Workout GetWorkoutById(string userId, string id)
         {
             return _db.Workouts
                 .AsNoTracking()
-                .Include(u => u.Logs)
+                .Where( x => x.id.Equals(id))
+                .Include(x => x.Logs)
+                .ThenInclude( x => x.UserId.Equals(userId))
                 .FirstOrDefault(ex => ex.id.Equals(id));
-        }
-
-        public Workout GetWorkoutByName(string name)
-        {
-            return _db.Workouts
-                .AsNoTracking()
-                .Include(u => u.Logs)
-                .FirstOrDefault(ex=> ex.Name.Equals(name));
         }
 
         public int Count()

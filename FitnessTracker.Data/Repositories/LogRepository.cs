@@ -46,36 +46,15 @@ namespace FitnessTracker.Data.Repositories
             return x.FirstOrDefault();
         }
 
-        public Log GetLogById(int id)
+        public Log GetLogById(string userId, int id)
         {
             return _db.Logs
                 .AsNoTracking()
                 .Include(user => user.User)
                 .Include(logex => logex.LogExercises)
                 .ThenInclude(log => log.Exercise)
-                .Where(q => q.LogId == id)
+                .Where(q => q.UserId.Equals(userId) && q.LogId == id)
                 .SingleOrDefault();
-        }
-
-        public Log GetLogByUserId(int id)
-        {
-            return _db.Logs
-                .AsNoTracking()
-                .Include(user => user.User)
-                .Include(logex => logex.LogExercises)
-                .ThenInclude(log => log.Exercise)
-                .FirstOrDefault(q => q.LogId == id);
-        }
-
-        public IEnumerable<Log> GetLogsByUserName(string username)
-        {
-            return _db.Logs
-                .AsNoTracking()
-                .Include(user => user.User)
-                .Include(logex => logex.LogExercises)
-                .ThenInclude(log => log.Exercise)
-                .Where( q => q.User.UserName.Equals(username))
-                .ToList();
         }
 
         public IEnumerable<Log> GetLogsBySet(string id, DateTime date)
@@ -103,9 +82,9 @@ namespace FitnessTracker.Data.Repositories
             return logs.Count();
         }
 
-        public Log Update(Log log)
+        public Log Update(string userId, Log log)
         {         
-            Log tmp = GetLogById(log.LogId);
+            Log tmp = GetLogById(userId, log.LogId);
             tmp.Comments = log.Comments;
             tmp.Modified = log.Modified;
 
@@ -123,9 +102,9 @@ namespace FitnessTracker.Data.Repositories
             return log;
         }
 
-        public Log Delete(int id)
+        public Log Delete(string userId, int id)
         {
-            var log = GetLogByUserId(id);
+            var log = GetLogById(userId, id);
             if ( log == null) return null;
 
             var results = _db.Remove(log).Entity;

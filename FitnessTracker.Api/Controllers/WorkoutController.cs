@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FitnessTracker.Api.DTO;
+using FitnessTracker.Api.Extenisons;
 using FitnessTracker.Core.Entities;
 using FitnessTracker.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,9 @@ namespace FitnessTracker.Api.Controllers
         {
             try
             {
-                var results = _workoutRepository.GetAllWorkouts();
+                var userId = User.GetUserId();
+
+                var results = _workoutRepository.GetAllWorkouts(userId);
                 return Ok(results);
             }
             catch (Exception ex)
@@ -45,7 +48,9 @@ namespace FitnessTracker.Api.Controllers
         {
             try
             {
-                var results = _workoutRepository.GetWorkoutById(id);
+                var userId = User.GetUserId();
+
+                var results = _workoutRepository.GetWorkoutById(userId, id);
                 return Ok(results);
             }
             catch (Exception ex)

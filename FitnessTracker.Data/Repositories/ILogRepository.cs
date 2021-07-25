@@ -11,17 +11,15 @@ namespace FitnessTracker.Data.Repositories
 
         IEnumerable<Log> GetAllLogs(string id);
 
-        Log GetLogById(int id);
-
-        IEnumerable<Log> GetLogsByUserName(string username);
+        Log GetLogById(string userId, int id);
 
         IEnumerable<Log> GetLogsBySet(string id, DateTime date);
 
         Log CreateLog(Log log);
 
-        Log Update(Log log);
+        Log Update(string userId, Log log);
 
-        Log Delete(int id);
+        Log Delete(string userId, int id);
 
         int GetLogCount();
 
