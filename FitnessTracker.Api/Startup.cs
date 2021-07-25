@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using AutoMapper;
 
-using FitnessTracker.Services;
 using FitnessTracker.Data;
 using FitnessTracker.Data.Repositories;
 using Microsoft.Net.Http.Headers;
@@ -120,16 +119,9 @@ namespace FitnessTracker
             services.AddTransient<ILogRepository, LogRepository>();
             services.AddTransient<IExerciseRepository, ExerciseRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<ILogService, LogService>();
             services.AddTransient<IEmailService, EmailService>();
 
             services.AddControllers();
-
-            //services.AddMvc(option => {
-            //    option.EnableEndpointRouting = false;
-            //    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-            //    option.Filters.Add(new AuthorizeFilter(policy));
-            //}).AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

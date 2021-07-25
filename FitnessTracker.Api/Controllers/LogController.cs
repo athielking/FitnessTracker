@@ -4,12 +4,12 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
-using FitnessTracker.Services;
 using AutoMapper;
 using FitnessTracker.DTO;
 using FitnessTracker.Core.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using FitnessTracker.Data.Repositories;
 
 namespace FitnessTracker.Controllers
 {
@@ -17,13 +17,13 @@ namespace FitnessTracker.Controllers
     [Route("api/[Controller]")]
     public class LogController : Controller
     {
-        private readonly ILogService _logService;
+        private readonly ILogRepository _logRepository;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
 
-        public LogController(ILogService logService, ILogger<Log> logger, IMapper mapper)
+        public LogController(ILogRepository logRepository, ILogger<Log> logger, IMapper mapper)
         {
-            _logService = logService;
+            _logRepository = logRepository;
             _logger = logger;
             _mapper = mapper;
         }
@@ -33,7 +33,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                var results = _logService.GetAllLogs();
+                var results = _logRepository.GetAllLogs();
                 return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                var results = _logService.GetAllLogs(id);
+                var results = _logRepository.GetAllLogs(id);
                 return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
             }
             catch (Exception ex)
@@ -65,7 +65,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                var results = _logService.GetLogsBySet(id, date);
+                var results = _logRepository.GetLogsBySet(id, date);
                 return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace FitnessTracker.Controllers
             {
                 if (id == 0) return NotFound();
 
-                var result = _logService.GetLogById(id);
+                var result = _logRepository.GetLogById(id);
                 return Ok(_mapper.Map<Log, LogDTO>(result));
             }
             catch (Exception ex)
@@ -100,7 +100,7 @@ namespace FitnessTracker.Controllers
             {
                 if (string.IsNullOrEmpty(username)) return NotFound();
 
-                var results = _logService.GetLogsByUserName(username);
+                var results = _logRepository.GetLogsByUserName(username);
                 return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
             }
             catch (Exception ex)
@@ -120,7 +120,7 @@ namespace FitnessTracker.Controllers
 
                 var newLog = _mapper.Map<SaveLogDTO, Log>(log);
 
-                var logCreated = _logService.CreateLog(newLog);
+                var logCreated = _logRepository.CreateLog(newLog);
                 var results = _mapper.Map<Log, LogDTO>(logCreated);
 
                 return Ok(results);
@@ -143,7 +143,7 @@ namespace FitnessTracker.Controllers
                 }
 
                 var tmpLog = _mapper.Map<SaveLogDTO, Log>(log, new Log());
-                var logUpdated = _logService.UpdateLog(tmpLog);
+                var logUpdated = _logRepository.Update(tmpLog);
                 var results = _mapper.Map<Log, LogDTO>(logUpdated);
 
                 return Ok(results);
@@ -161,7 +161,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                var log = _logService.DeleteLog(id);
+                var log = _logRepository.Delete(id);
                 if (log == null)
                 {
                     return NotFound("Cannot delete log. Cannot find Log");
