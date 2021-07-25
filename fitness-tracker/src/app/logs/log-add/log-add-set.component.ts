@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { LogService } from '../log.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { ILog, ILogExercise, ISaveLog, ISingleLog, createSaveLog, } from 'src/app/shared/models/log';
+import { ILog, ILogExercise, ISaveLog, ISingleLog, SaveLog, } from 'src/app/shared/models/log';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class LogAddSetComponent implements OnInit, OnDestroy{
     }
 
     saveLog($event){
-        let log:ISaveLog = createSaveLog($event);
+        let log:ISaveLog = new SaveLog($event);
         this.logService.addLog(log).subscribe( (data: ILog) =>{
             this.notifyService.showSuccess("Log was Created");
         },
