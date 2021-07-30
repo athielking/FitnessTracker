@@ -1,11 +1,9 @@
-import { Component, OnInit, OnDestroy } from "@angular/core"
+import { Component, OnInit,OnDestroy} from "@angular/core"
+import { Router } from '@angular/router';
+import { Observable, Subject} from 'rxjs';
+
 import {ILog} from "../../shared/models/log"
 import { LogService } from '../log.service';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { Observable, combineLatest, Subject, of } from 'rxjs';
-import { map, startWith, takeUntil, filter } from 'rxjs/operators';
-
-import { ActivatedRoute, Params, ParamMap, Router } from '@angular/router';
 import { AuthStore } from "src/app/auth";
 import { IUser } from "src/app/shared/models/user";
 
@@ -13,64 +11,38 @@ import { IUser } from "src/app/shared/models/user";
   templateUrl: "./log-list.component.html",
   styleUrls: ["../log.css"]
 })
-export class LogListComponent implements OnInit, OnDestroy { 
+export class LogListComponent implements OnInit,OnDestroy { 
   
     logs$: Observable<ILog[]>  
-    filteredLogs$: Observable<ILog[]>
-    filter$: Observable<string> 
 
     user:IUser;
-    
-    filter:FormControl
-    logForm:FormGroup
-
+    user$:any;
     pageTitle:string = "Log List"
-    logsFilter:string = "";
-    errorMessage:string = "";
+
+    logs:ILog[];
 
     private _onDestroy$ = new Subject();
 
-    constructor(private authStore: AuthStore, private logService:LogService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private route: Router) { }
-
+    constructor(private authStore: AuthStore, private logService:LogService, private route: Router) { }
+    
     ngOnDestroy(): void {
-        if(this._onDestroy$){
-            this._onDestroy$.next(null);
-            this._onDestroy$.unsubscribe();
-        }
+      if(this._onDestroy$){
+          this._onDestroy$.next(null);
+          this._onDestroy$.unsubscribe();
+      }
     }
 
     ngOnInit(){
 
-        this.authStore.loggedInUser$.subscribe((user:IUser) =>{
+        this.user$ = this.authStore.loggedInUser$.subscribe((user:IUser) =>{
           this.user = user;
         })
 
-        this.initFormGroup();
-        this.logs$ = this.logService.getUserLogs(this.user.id)
-        
-        this.filter$ = this.logForm.get('logFilter').valueChanges.pipe(startWith(''));
-
-        this.filteredLogs$ = combineLatest(this.logs$, this.filter$).pipe(takeUntil(this._onDestroy$),
-            map(([logs, filterString]) => logs.filter(log => log.user.userName.toLowerCase().indexOf
-            (filterString.toLowerCase()) !== -1 && (log.set == 1)))
-        );
-
-        this.updateFilter(this.user.userName);
-    }
-
-    updateFilter(username:string){
-        this.logForm.setValue({
-          logFilter:username, emitEvent:true
-        });
+        this.logs$ = this.logService.getUserLogs(this.user.id);
     }
 
     createSet(log:ILog){
       this.route.navigate(['/logs-add', {id:log.logId, date:log.created}]) 
     }
-
-    private initFormGroup(){
-      this.logForm = this.formBuilder.group({
-          logFilter:[''],emitEvent:true
-      });
-  }
+  
 }
