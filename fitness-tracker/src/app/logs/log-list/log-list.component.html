@@ -10,8 +10,8 @@
                 </tr>  
             </thead>  
             <tbody>  
-                <tr *ngFor="let log of logs$ | async ">  
-                    <log-detail [log]="log | logFilter: user.userName"></log-detail>
+                <tr *ngFor="let log of logs$ | logFilter: user.userName | async ">  
+                    <log-detail [log]="log"></log-detail>
                     <td *ngIf="log.set==1"><button type="button" class="btn btn-success mr-1" [routerLink]="['/log-add-set', log.logId, log.created]">Add Set</button> </td>
                 </tr>  
             </tbody>  
