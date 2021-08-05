@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { ISaveLog, ILog, ISingleLog, createSingleLog, createSaveLog } from '../../shared/models/log';
+import { ISaveLog, ILog, ISingleLog, SingleLog, SaveLog } from '../../shared/models/log';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { LogService } from '../log.service';
 
@@ -38,7 +38,7 @@ import { LogService } from '../log.service';
     }
 
     editLog($event){
-        let log:ISaveLog = createSaveLog($event);
+        let log:ISaveLog = new SaveLog($event);
         this.logService.updateLog(log).subscribe( (data: ILog) =>{
             this.notifyService.showSuccess("Log was Updated");
         },
@@ -60,6 +60,6 @@ import { LogService } from '../log.service';
     }
 
     private parseLog(log:ILog):ISingleLog{
-        return createSingleLog(log, log.logExercises[0]);
+        return new SingleLog(log, log.logExercises[0]);
     }   
 }

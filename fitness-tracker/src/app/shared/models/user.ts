@@ -1,13 +1,5 @@
-
-export function createUser(user:IUser):User{
-    return new User(user);
-}
-
-export function createUserAccount(userAccount:IUserAccount):UserAccountImpl{
-    return new UserAccountImpl()
-}
-
 export interface IUser{
+    id?:string;
     userName:string;
     firstName?:string;
     lastName?:string;
@@ -16,10 +8,11 @@ export interface IUser{
 
 export interface IUserAccount extends IUser {
     password:string;
+    confirmPassword?: string;
     reMemberMe?:boolean;
 }
 
-class UserAccountImpl implements IUserAccount{
+export class UserAccountImpl implements IUserAccount{
     userName: string;
     password: string;
     remberMe?: boolean;
@@ -34,7 +27,7 @@ class UserAccountImpl implements IUserAccount{
     }
 }
 
-class User implements IUser{
+export class User implements IUser{
     id:string;
     userName: string;
     firstName: string;

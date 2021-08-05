@@ -20,6 +20,11 @@ using FitnessTracker.Api.Models;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Cors;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.WebUtilities;
+
+using Microsoft.Extensions.Options;
+using FitnessTracker.Api.Configuration;
 
 namespace FitnessTracker.Api.Controllers
 {
@@ -28,19 +33,21 @@ namespace FitnessTracker.Api.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         
-        private readonly IConfiguration _config;        
+        private readonly JwtSetting _jwtSettings;        
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManger;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
         public AuthController(
-            ILogger<AuthController> logger,IConfiguration config, UserManager<User> userManager, SignInManager<User> signInManger, IMapper mapper)
+            ILogger<AuthController> logger, IOptions<JwtSetting> jwtSettings, UserManager<User> userManager, SignInManager<User> signInManger, IMapper mapper, IEmailService emailService)
         {
-            _config = config;
+            _emailService = emailService;
+            _jwtSettings = jwtSettings.Value;
             _logger = logger;
-            _userManager = userManager;
-            _signInManger = signInManger;
             _mapper = mapper;
+            _signInManger = signInManger;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
@@ -54,16 +61,15 @@ namespace FitnessTracker.Api.Controllers
                 var user = await _userManager.FindByNameAsync(model.UserName);
 
                 if (user == null) return BadRequest();
-                
-                var result = await _signInManger.PasswordSignInAsync(user, model.Password, model.ReMemberMe, false);
 
+                var result = await _signInManger.PasswordSignInAsync(user, model.Password, model.ReMemberMe, false);
 
                 if (!result.Succeeded) return BadRequest("Invalid Login attempt");
 
                 var tokenManager = new JwtTokenManager(
-                    _config["JwtKey"],
-                    double.Parse(_config["JwtExpireDays"]),
-                    _config["JwtIssuer"]
+                    _jwtSettings.JwtKey,
+                    _jwtSettings.JwtExpireDays,
+                    _jwtSettings.JwtIssuer
                 );
 
                 var token = tokenManager.GenerateJwtToken(user);
@@ -98,7 +104,7 @@ namespace FitnessTracker.Api.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
+                if (!ModelState.IsValid || model == null) return BadRequest(ModelState);
        
                 var user = await _userManager.FindByNameAsync(model.Username);
                 if (user != null)
@@ -110,8 +116,6 @@ namespace FitnessTracker.Api.Controllers
                     Email = model.Email
                 };
 
-                //user = _mapper.Map<User>(model);
-                ///user.PasswordHash = string.Empty;
                 var result = await _userManager.CreateAsync(user, model.Password);            
                 if (!result.Succeeded)
                 {
@@ -119,7 +123,7 @@ namespace FitnessTracker.Api.Controllers
                     return BadRequest(new {errors=err});
                 }
                 //await _userManager.AddToRoleAsync(user, "user");
-                return Ok();
+                return StatusCode(201);
             }
             catch (Exception ex)
             {
@@ -128,18 +132,48 @@ namespace FitnessTracker.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("ResetPassword")]
-        public IActionResult ResetPassword(ResetPasswordDTO model)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPasswordDto)
         {
-            try
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var user = await _userManager.FindByNameAsync(resetPasswordDto.Username);
+            if (user == null)
+                return BadRequest("Invalid Request");
+            var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
+            if (!resetPassResult.Succeeded)
             {
-                return Ok();
+                var errors = resetPassResult.Errors.Select(e => e.Description);
+                return BadRequest(new { Errors = errors });
             }
-            catch (Exception ex)
+            return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO forgotPasswordDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var user = await _userManager.FindByEmailAsync(forgotPasswordDto.Email);
+
+            if (user == null)
+                return BadRequest("Invalid Request");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var param = new Dictionary<string, string>
             {
-                _logger.LogError($"Failed to Sign in User: {ex}");
-                return BadRequest(new { errorMessage = "Failed to Sign in User" });
-            }
+                {"token", token },
+                {"email", forgotPasswordDto.Email }
+            };
+
+            var callback = QueryHelpers.AddQueryString(forgotPasswordDto.ClientURI, param);
+            _emailService.SendEmail(user.Email, "Reset password token", callback);
+
+            return Ok();
         }
 
     }

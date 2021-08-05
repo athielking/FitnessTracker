@@ -10,19 +10,12 @@ namespace FitnessTracker.Mapping
     {
         public LogProfile()
         {
-
-
-
-            CreateMap<Log, LogDTO>(MemberList.None);
-            CreateMap<Log, LogDTO>(MemberList.None).ReverseMap();
-
-            CreateMap<User, UserDTO>();
             CreateMap<User, UserDTO>().ReverseMap();
 
-            CreateMap<LogExercise, LogExerciseDTO>(MemberList.None);
+            CreateMap<Workout, WorkoutDTO>().ReverseMap();
+
             CreateMap<LogExercise, LogExerciseDTO>(MemberList.None).ReverseMap();
 
-            CreateMap<Exercise, ExerciseDTO>(MemberList.None);
             CreateMap<Exercise, ExerciseDTO>(MemberList.None).ReverseMap();
 
             CreateMap<SaveLogDTO, Log>().ConvertUsing<AddToListResolver>();

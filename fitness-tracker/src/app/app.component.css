@@ -1,3 +1,19 @@
 .container-main{
-    margin-top:20px
+    padding-top:20px;
 }
+
+.container-body {background-color:#FFF}
+
+.nav-pills > li > a {
+    color: #999 !important;
+}
+
+.nav-pills > li > a.active {
+    background-color: #000 !important;
+    color:aqua !important;
+  }
+  
+.nav-pills > li > a:hover {
+    color: #ffffff !important;
+}
+

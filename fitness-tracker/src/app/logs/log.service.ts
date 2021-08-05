@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs'
 import { map, shareReplay } from 'rxjs/operators'
 
 import { HttpClientService } from '../core/services/httpclient.service'
-import { ILog, ISaveLog, createLog} from "../shared/models/log"
+import { ILog, ISaveLog, Log} from "../shared/models/log"
 
 const path:string = "https://localhost:5001/api/log"
 
@@ -24,21 +24,28 @@ export class LogService{
     getLogs():Observable<ILog[]>{
         return this.httpClientService.get<ILog[]>(path)
         .pipe(map( (logs:ILog[]) =>{
-            return logs.map( log => createLog(log))
+            return logs.map( log => new Log(log))
+        }));
+    }
+
+    getUserLogs(id:string):Observable<ILog[]>{
+        return this.httpClientService.get<ILog[]>(`${path}/GetUserLogs/${id}`)
+        .pipe(map( (logs:ILog[]) =>{
+            return logs.map( log => new Log(log))
         }));
     }
 
     getLogById(id:string){
         return this.httpClientService.get<ILog>(`${path}/${id}`)
         .pipe(map( (log:ILog) =>{
-            return createLog(log);
+            return new Log(log);
         }));
     }
 
     getLogBySet(id:string, date:string):Observable<ILog[]>{
         return this.httpClientService.get<ILog[]>(`${path}/${id}/${date}`)
         .pipe(map ( (logs:ILog[]) => {
-            return logs.map( log => createLog(log));
+            return logs.map( log => new Log(log));
         }));
     }
 

@@ -10,7 +10,11 @@ namespace FitnessTracker.Core.Entities
 
         public string UserId { get; set; }
 
+        public string WorkoutId { get; set; }
+
         public User User { get; set; }
+
+        public Workout Workout { get; set; }
 
         public int Set { get; set; }
 

@@ -2,14 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
-using FitnessTracker.Services;
 using AutoMapper;
 using FitnessTracker.DTO;
 using FitnessTracker.Core.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using FitnessTracker.Data.Repositories;
+using FitnessTracker.Api.Extenisons;
 
 namespace FitnessTracker.Controllers
 {
@@ -17,39 +19,27 @@ namespace FitnessTracker.Controllers
     [Route("api/[Controller]")]
     public class LogController : Controller
     {
-        private readonly ILogService _logService;
+        private readonly ILogRepository _logRepository;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
-        public LogController(ILogService logService, ILogger<Log> logger, IMapper mapper)
+        public LogController(ILogRepository logRepository, IUserRepository userRepository, ILogger<Log> logger, IMapper mapper)
         {
-            _logService = logService;
+            _logRepository = logRepository;
             _logger = logger;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<LogDTO>> Get()
+        [HttpGet("GetAll")]
+        public ActionResult<IEnumerable<LogDTO>> GetAll()
         {
             try
             {
-                var results = _logService.GetAllLogs();
-                return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to get logs: {ex}");
-                return BadRequest("Failed to get logs");
-            }
+                var userId = User.GetUserId();
 
-        }
-
-        [HttpGet("{id}/{date}")]
-        public ActionResult<IEnumerable<LogDTO>> Get(string id, DateTime date)
-        {
-            try
-            {
-                var results = _logService.GetLogsBySet(id, date);
+                var results = _logRepository.GetAllLogs(userId);
                 return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
             }
             catch (Exception ex)
@@ -67,8 +57,10 @@ namespace FitnessTracker.Controllers
             {
                 if (id == 0) return NotFound();
 
-                var result = _logService.GetLogById(id);
-                return Ok(_mapper.Map<Log, LogDTO>(result));
+                var userId = User.GetUserId();
+                var log = _logRepository.GetLogById(userId, id);
+
+                return Ok(_mapper.Map<Log, LogDTO>(log));
             }
             catch (Exception ex)
             {
@@ -77,14 +69,18 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [HttpGet("{username}")]
-        public ActionResult<LogDTO> Get(string username)
+        [HttpGet("GetLogsBySetId/{setId}")]
+        public ActionResult<IEnumerable<LogDTO>> GetLogsBySetId(string setId)
         {
             try
             {
-                if (string.IsNullOrEmpty(username)) return NotFound();
+                var userId = User.GetUserId();
+                var logs = _logRepository.GetAllLogs(userId);
 
-                var results = _logService.GetLogsByUserName(username);
+                if (!logs.Any()) return NotFound("Could not find logs");
+
+                var results = logs.Where(c => c.SetId == setId).ToList();
+
                 return Ok(_mapper.Map<IEnumerable<Log>, IEnumerable<LogDTO>>(results));
             }
             catch (Exception ex)
@@ -92,19 +88,28 @@ namespace FitnessTracker.Controllers
                 _logger.LogError($"Failed to get logs: {ex}");
                 return BadRequest("Failed to get logs");
             }
+
         }
+
+        
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Post([FromBody]SaveLogDTO log)
+        public ActionResult Post([FromBody]SaveLogDTO logDto)
         {
             try
             {
-                if(log == null) return NotFound();
+                if(logDto == null) return NotFound();
 
-                var newLog = _mapper.Map<SaveLogDTO, Log>(log);
+                var userId = User.GetUserId();
+                if (_userRepository.GetById(userId) == null && !userId.Equals(logDto.User.Id))
+                {
+                    return NotFound("Failed to create Log.  User not found");
+                }
 
-                var logCreated = _logService.CreateLog(newLog);
+                var log = _mapper.Map<SaveLogDTO, Log>(logDto);
+
+                var logCreated = _logRepository.CreateLog(log);
                 var results = _mapper.Map<Log, LogDTO>(logCreated);
 
                 return Ok(results);
@@ -117,17 +122,23 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<LogDTO> Put(int id, [FromBody] SaveLogDTO log)
+        public ActionResult<LogDTO> Put(int id, [FromBody] SaveLogDTO logDto)
         {
             try
             {
-                if (id < 1 || id != log.LogId)
+                if (id < 1 || id != logDto.LogId)
                 {
-                    return BadRequest("Unable to update Log");
+                    return BadRequest("Unable to update Log. Log id must have a value");
                 }
 
-                var tmpLog = _mapper.Map<SaveLogDTO, Log>(log, new Log());
-                var logUpdated = _logService.UpdateLog(tmpLog);
+                var userId = User.GetUserId();
+                if (_userRepository.GetById(userId) == null && !userId.Equals(logDto.User.Id))
+                {
+                    return NotFound("Failed to update Log.  User not found");
+                }
+
+                var log = _mapper.Map(logDto, new Log());
+                var logUpdated = _logRepository.Update(userId, log);
                 var results = _mapper.Map<Log, LogDTO>(logUpdated);
 
                 return Ok(results);
@@ -145,7 +156,9 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                var log = _logService.DeleteLog(id);
+                var userId = User.GetUserId();
+
+                var log = _logRepository.Delete(userId, id);
                 if (log == null)
                 {
                     return NotFound("Cannot delete log. Cannot find Log");

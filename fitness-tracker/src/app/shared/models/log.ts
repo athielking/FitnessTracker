@@ -43,23 +43,7 @@ export interface ISaveLog{
     logExercise:ILogExercise;
 }
 
-export function createLog(log?:ILog){
-    return new Log(log);
-}
-
-export function createSingleLog(log?:ILog, logExercise?:ILogExercise) {
-  return new SingleLog(log, logExercise);
-}
-
-export function createSaveLog(log?: ISaveLog) {
-  return new SaveLog(log);
-}
-
-export function createLogExercise(logExercise?: ILogExercise) {
-    return new LogExercise(logExercise);
-  }
-
-class Log implements ILog{
+export class Log implements ILog{
     logId: number;
     user: IUser;
     set: number;
@@ -75,7 +59,7 @@ class Log implements ILog{
     }
 }
 
-class LogExercise implements ILogExercise{
+export class LogExercise implements ILogExercise{
     logId: number;
     exerciseId: number;
     exerciseName: string;
@@ -90,7 +74,7 @@ class LogExercise implements ILogExercise{
     }
 }
 
-class SaveLog implements ISaveLog{
+export class SaveLog implements ISaveLog{
     comments: string;
     created: string;
     logExercise: ILogExercise;        
@@ -124,7 +108,7 @@ class SaveLog implements ISaveLog{
     }
 }
 
-class SingleLog implements ISingleLog{
+export class SingleLog implements ISingleLog{
     logId: number;
     user: IUser;
     set: number;

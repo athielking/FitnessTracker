@@ -11,6 +11,7 @@ import { LogFormComponent } from './log-form/log-form.component';
 import { LogDetailComponent } from './log-detail/log-detail.component';
 import { LogAddSetComponent } from './log-add/log-add-set.component';
 import { LogCreateComponent } from './log-create/log-create.component';
+import { LogFilterPipe } from './log-filter.pipe';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { LogCreateComponent } from './log-create/log-create.component';
         LogDetailComponent,           
         LogEditComponent,
         LogAddSetComponent,
-        LogCreateComponent
+        LogCreateComponent,
+        LogFilterPipe
     ],
     imports: [
         CommonModule,

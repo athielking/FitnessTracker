@@ -48,6 +48,8 @@ export class AuthAccountRegisterComponent implements OnInit{
         'reEnterPassword':''
     }
 
+    pageTitle = 'Register';
+
     constructor(private router: Router, private formBuilder: FormBuilder, private authStore: AuthStore, private notifyService : NotificationService){
 
     }
@@ -127,6 +129,7 @@ export class AuthAccountRegisterComponent implements OnInit{
         const userAccount:IUserAccount = {
             userName : form.value.userName,
             password : form.value.password,
+            confirmPassword:form.value.reEnterPassword,
             firstName: form.value.firstName,
             lastName : form.value.lastName,
             email : form.value.email

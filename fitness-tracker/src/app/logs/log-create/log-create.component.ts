@@ -6,10 +6,10 @@ import { UUID } from 'angular2-uuid';
 
 import { LogService } from '../log.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { ILog, ILogExercise, ISaveLog, ISingleLog, createSaveLog, createSingleLog, } from 'src/app/shared/models/log';
+import { ILog, ILogExercise, ISaveLog, ISingleLog, SaveLog, SingleLog, } from 'src/app/shared/models/log';
 import { IExercise } from 'src/app/shared/models/exercise';
 import { AuthStore } from 'src/app/auth';
-import { createUser, IUser } from 'src/app/shared/models/user';
+import { IUser } from 'src/app/shared/models/user';
 import { ExerciseStore } from 'src/app/shared/stores/exerciseStore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -78,7 +78,7 @@ export class LogCreateComponent implements OnInit, OnDestroy{
 
     saveLog(e){
         if(Number(this.log.exerciseId) > 0){
-            let log:ISaveLog = createSaveLog(e);
+            let log:ISaveLog = new SaveLog(e);
             log.created = new Date().toLocaleString();
 
             var exercise = this.exerciseStore.getExercise(this.log.exerciseId)

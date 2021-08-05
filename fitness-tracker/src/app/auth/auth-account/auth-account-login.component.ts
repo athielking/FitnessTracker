@@ -18,6 +18,8 @@ export class AuthAccountLoginComponent implements OnInit{
         'password':'',
     }
 
+    pageTitle = 'Login';
+
     constructor(
       private router: Router, 
       private formBuilder: FormBuilder, 
@@ -38,7 +40,7 @@ export class AuthAccountLoginComponent implements OnInit{
     }
 
     private loginCallback(){
-      this.router.navigateByUrl('/users');
+      this.router.navigateByUrl('/');
     }
 
     private initFormGroup(){
