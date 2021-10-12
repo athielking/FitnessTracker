@@ -11,10 +11,10 @@ using Microsoft.IdentityModel.Logging;
 
 using AutoMapper;
 
-using FitnessTracker.Data;
 using FitnessTracker.Data.Repositories;
 using FitnessTracker.Api.Configuration;
 using FitnessTracker.Api.Services;
+using FitnessTracker.Data.Extensions;
 
 namespace FitnessTracker
 {
@@ -44,22 +44,16 @@ namespace FitnessTracker
                  });
             });
 
+            IdentityModelEventSource.ShowPII = true;
             services.AddMicrosoftIdentityWebApiAuthentication(Configuration, "AzureAd");
 
-            IdentityModelEventSource.ShowPII = true;
-
-            services.AddDbContextPool<FitnessTrackerContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("FitnesssTrackerConn"))
-            );
+            services.AddFitnessTrackerDB(Configuration);
 
             // scans all the assemblies looking for all the classes that inherit AutoMapper.Profile class
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.Configure<EmailSetting>(Configuration.GetSection(nameof(EmailSetting)));
 
-            services.AddTransient<ILogRepository, LogRepository>();
-            services.AddTransient<IExerciseRepository, ExerciseRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IWorkoutRepository, WorkoutRepository>();
 
