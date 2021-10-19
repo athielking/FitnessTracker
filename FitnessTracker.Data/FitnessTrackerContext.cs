@@ -3,12 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 using FitnessTracker.Core.Entities;
 using System.Linq;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using Azure.Identity;
 
 namespace FitnessTracker.Data
 {
-    public class FitnessTrackerContext : IdentityDbContext<User>
+    public class FitnessTrackerContext : DbContext
     {
-        public FitnessTrackerContext(DbContextOptions<FitnessTrackerContext> options) : base(options) { }
+        public IConfiguration Configuration { get; }
+
+        public FitnessTrackerContext(DbContextOptions<FitnessTrackerContext> options) : base(options) {}
 
         public DbSet<Workout> Workouts { get; set; }
 
