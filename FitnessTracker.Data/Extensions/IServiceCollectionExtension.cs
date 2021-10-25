@@ -20,11 +20,8 @@ namespace FitnessTracker.Data.Extensions
 
             services.AddDbContext<FitnessTrackerContext>(options =>
             {
-                var dbConnection = new SqlConnection(config.GetConnectionString(nameof(FitnessTrackerContext)))
-                {
-                    AccessToken = new AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/").Result
-                };
-                options.UseSqlServer(dbConnection);
+               options.UseSqlServer(config.GetConnectionString(nameof(FitnessTrackerContext)))
+                      .AddInterceptors(new ConnectionInterceptor(config.GetSection("PartialDns").Value));
             });
         }
     }
