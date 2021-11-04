@@ -13,7 +13,18 @@ namespace FitnessTracker.Mapping
         {
             CreateMap<Microsoft.Graph.User, UserAD>().ReverseMap();
 
-            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<UserAD, UserDTO>().ReverseMap()
+                .ForMember(dest => dest.Id, act => act.MapFrom(src => src.Id))
+                .ForMember(dest => dest.GivenName, act => act.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.Surname, act => act.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.Mail, act => act.MapFrom(src => src.Email))
+                .ForMember(dest => dest.DisplayName, act => act.MapFrom(src => src.Username));
+
+            CreateMap<UserAD, RegisterDTO>().ReverseMap()
+                .ForMember(dest => dest.GivenName, act => act.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.Surname, act => act.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.Mail, act => act.MapFrom(src => src.Email))
+                .ForMember(dest => dest.DisplayName, act => act.MapFrom(src => src.Username));
 
             CreateMap<Workout, WorkoutDTO>().ReverseMap();
 

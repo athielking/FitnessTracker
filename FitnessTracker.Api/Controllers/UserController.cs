@@ -1,54 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
-using FitnessTracker.Data.Repositories;
 using AutoMapper;
+
 using FitnessTracker.DTO;
-using FitnessTracker.Core.Entities;
-using Microsoft.AspNetCore.Authorization;
+using FitnessTracker.Api.Services;
+using FitnessTracker.Api.Models;
+using FitnessTracker.Api.DTO;
 
 namespace FitnessTracker.Controllers
 {
     [Route("api/[Controller]")]
     public class UserController : Controller
     {
-        private readonly IUserRepository _userRepository;
         private readonly ILogger<UserController> _logger;
         private readonly IMapper _mapper;
+        private readonly IMicrosoftGraphService _microsoftGraphService;
 
-        public UserController(ILogger<UserController> logger, IUserRepository userRepository, IMapper mapper)
+        public UserController(ILogger<UserController> logger, IMapper mapper, IMicrosoftGraphService microsoftGraphService)
         {
             _logger = logger;
-            _userRepository = userRepository;
             _mapper = mapper;
+            _microsoftGraphService = microsoftGraphService;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDTO>> Get()
+        public async Task<ActionResult<UserAD>> Get()
         {
             try
             {
-                var results = _userRepository.GetAllUsers();
-                return Ok(_mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(results));
+                var user = await _microsoftGraphService.GetLoggedInUser();
+                return Ok(user);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to get users: {ex}");
-                return BadRequest("Failed to get users");
+                _logger.LogError($"Failed to get user: {ex}");
+                return BadRequest("Failed to get user");
             }
 
         }
 
-        [HttpGet("{name}")]
-        public ActionResult<UserDTO> Get(string name)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserAD>> Get(string id)
         {
             try
             {
-                var results = _userRepository.GetByUsername(name);
-                return Ok(_mapper.Map<User, UserDTO>(results));
+                var user = await _microsoftGraphService.GetUserById(id);
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -57,35 +57,40 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [HttpGet("GetById/{id}")]
-        public ActionResult<UserDTO> GetByUserId(string id)
+        [HttpGet("Search/{key}")]
+        public async Task<ActionResult<UserAD>> Search(string key)
         {
             try
             {
-                var results = _userRepository.GetById(id);
-                return Ok(_mapper.Map<User, UserDTO>(results));
+                var results = await _microsoftGraphService.Search(key);
+                return Ok(results);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to get user: {ex}");
-                return BadRequest("Failed to get user");
+                _logger.LogError($"Failed to find user: {ex}");
+                return BadRequest("Failed to find user");
             }
         }
 
         [HttpPost]
-        public ActionResult<UserDTO> Post([FromBody] UserDTO user)
+        public async Task<ActionResult<UserAD>> Post([FromBody] RegisterDTO user)
         {
             try
             {
                 if (user == null)
                 {
-                    throw new InvalidDataException("User could not saved");
+                    return NotFound("User could not be created");
                 }
 
-                var newuser = _mapper.Map<UserDTO, User>(user);
-                var results = _userRepository.Create(newuser);
+                if (string.IsNullOrEmpty(user.Password) || string.IsNullOrEmpty(user.ConfirmPassword) && !user.ConfirmPassword.Equals(user.Password))
+                {
+                    return BadRequest("Failed to create User");
+                }
 
-                return Ok(_mapper.Map<User, UserDTO>(results));
+                var newuser = _mapper.Map<RegisterDTO, UserAD>(user);
+                var results = await _microsoftGraphService.Create(newuser);
+
+                return Ok(_mapper.Map<UserAD, UserDTO>(results));
             }
             catch (Exception ex)
             {
@@ -94,35 +99,55 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public ActionResult<UserDTO> Put(string id, [FromBody] UserDTO user)
-        {          
+        [HttpPut]
+        public async Task<ActionResult<bool>> UpdatePassword([FromBody] string password) {
             try
             {
-                if (string.IsNullOrEmpty(id)  || !id.Equals(user.Id))
+                if (string.IsNullOrEmpty(password))
                 {
-                    return BadRequest("Parameter Id and customer ID must be the same");
+                    return NotFound("Failed to update password");
                 }
-                var tmp = _mapper.Map<UserDTO, User>(user);
-                var results = _userRepository.Update(tmp);
 
-                return Ok(_mapper.Map<User, UserDTO>(results));
+                return await _microsoftGraphService.UpdatePassword(password);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to update user: {ex}");
-                return BadRequest("Failed to update user");
+                _logger.LogError($"Failed to update password: {ex}");
+                return BadRequest("Failed to update password");
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<UserAD>> Put(string id, [FromBody] UserDTO user)
+        {
+            try
+            {
+                if (user == null)
+                {
+                    return NotFound("User could not be updated");
+                }
+
+                var newuser = _mapper.Map<UserDTO, UserAD>(user);
+                var results = await _microsoftGraphService.Update(newuser);
+
+                return Ok(_mapper.Map<UserAD, UserDTO>(results));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to create User: {ex}");
+                return BadRequest("Failed to create User");
             }
 
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
             try
             {
-                var user = _userRepository.Delete(id);
-                if (user == null)
+                var results = await _microsoftGraphService.Delete(id);
+                if (!results)
                 {
                     return NotFound("Cannot delete User. Cannot find User");
                 }

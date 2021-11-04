@@ -15,6 +15,7 @@ using FitnessTracker.Data.Repositories;
 using FitnessTracker.Api.Configuration;
 using FitnessTracker.Api.Services;
 using FitnessTracker.Data.Extensions;
+using FitnessTracker.Api.Models.Settings;
 
 namespace FitnessTracker
 {
@@ -45,9 +46,13 @@ namespace FitnessTracker
             });
 
             IdentityModelEventSource.ShowPII = true;
+
             services.AddMicrosoftIdentityWebApiAuthentication(Configuration, "AzureAd");
 
             services.AddFitnessTrackerDB(Configuration);
+
+            //services.Configure<MicrosoftGraphApi>(
+            //    options => Configuration.GetSection(nameof(MicrosoftGraphApi)).Bind(options));
 
             // scans all the assemblies looking for all the classes that inherit AutoMapper.Profile class
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -56,6 +61,8 @@ namespace FitnessTracker
 
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IWorkoutRepository, WorkoutRepository>();
+
+            services.AddTransient<IMicrosoftGraphService, MicrosoftGraphService>();
 
             services.AddControllers();
         }
