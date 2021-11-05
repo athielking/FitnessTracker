@@ -96,6 +96,7 @@ namespace FitnessTracker.Api.Services
         public async Task<UserAD> Create(UserAD user)
         {
             var micrographUser = _mapper.Map<UserAD, User>(user);
+            micrographUser.UserPrincipalName = $"{user.GivenName.First()}{user.Surname}@davidgodi84gmail.onmicrosoft.com";
             micrographUser.AccountEnabled = true;
             micrographUser.PasswordProfile = new PasswordProfile
             {
