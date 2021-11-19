@@ -9,9 +9,12 @@ using FitnessTracker.DTO;
 using FitnessTracker.Api.Services;
 using FitnessTracker.Api.Models;
 using FitnessTracker.Api.DTO;
+using Microsoft.Identity.Web.Resource;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitnessTracker.Controllers
 {
+    [Authorize]
     [Route("api/[Controller]")]
     public class UserController : Controller
     {
@@ -27,12 +30,12 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<UserAD>> Get()
+        public async Task<ActionResult<UserDTO>> Get()
         {
             try
             {
                 var user = await _microsoftGraphService.GetLoggedInUser();
-                return Ok(user);
+                return Ok(_mapper.Map<UserAD, UserDTO>(user));
             }
             catch (Exception ex)
             {
@@ -43,12 +46,17 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserAD>> Get(string id)
+        public async Task<ActionResult<UserDTO>> Get(string id)
         {
             try
             {
+                if (!Guid.TryParse(id, out var guidOutput))
+                {
+                    return NotFound($"Failed to get user: {nameof(id)} not found.");
+                }
+
                 var user = await _microsoftGraphService.GetUserById(id);
-                return Ok(user);
+                return Ok(_mapper.Map<UserAD, UserDTO>(user));
             }
             catch (Exception ex)
             {
@@ -58,12 +66,17 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("Search/{key}")]
-        public async Task<ActionResult<UserAD>> Search(string key)
+        public async Task<ActionResult<UserDTO>> Search(string key)
         {
             try
             {
-                var results = await _microsoftGraphService.Search(key);
-                return Ok(results);
+                if (string.IsNullOrEmpty(key))
+                {
+                    return NotFound($"Failed to get user: Search returned zero matches.");
+                }
+
+                var user = await _microsoftGraphService.Search(key);
+                return Ok(_mapper.Map<UserAD, UserDTO>(user));
             }
             catch (Exception ex)
             {
@@ -73,7 +86,8 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserAD>> Post([FromBody] RegisterDTO user)
+        //[RequiredScope("write")]
+        public async Task<ActionResult<UserDTO>> Post([FromBody] RegisterDTO user)
         {
             try
             {
@@ -119,7 +133,7 @@ namespace FitnessTracker.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<UserAD>> Put(string id, [FromBody] UserDTO user)
+        public async Task<ActionResult<UserDTO>> Put(string id, [FromBody] UserDTO user)
         {
             try
             {

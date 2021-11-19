@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace FitnessTracker.Api.Services
 {
@@ -16,11 +17,17 @@ namespace FitnessTracker.Api.Services
     {
         private readonly string _url;
         private readonly IMapper _mapper;
+        private readonly string _domain = "@davidgodi84gmail.onmicrosoft.com";
 
         public MicrosoftGraphService(IConfiguration config, IMapper mapper)
         {
             var microsoftGraphApi = config.GetSection(nameof(MicrosoftGraphApi))
                 .Get(typeof(MicrosoftGraphApi)) as MicrosoftGraphApi;
+
+            if(microsoftGraphApi == null && string.IsNullOrEmpty(microsoftGraphApi.BaseUrl))
+            {
+                throw new ArgumentNullException(nameof(microsoftGraphApi.BaseUrl), "");
+            }
 
             _url = microsoftGraphApi.BaseUrl;
             _mapper = mapper;
@@ -65,13 +72,15 @@ namespace FitnessTracker.Api.Services
             return _mapper.Map<User, UserAD>(user);
         }
 
-        public async Task<UserAD> Search(string key)
-        {
+        public async Task<UserAD> Search(string urlEncodedKey)
+        { 
             var graphServiceClient = await GetGraphServiceClient();
+
+            urlEncodedKey = urlEncodedKey.Replace("\n", "");
 
             var results = await graphServiceClient.Users
                     .Request()
-                    .Filter($"userPrincipalName eq '{key}' or displayName eq '{key}' or mail eq {key}")
+                    .Filter($"userPrincipalName eq '{urlEncodedKey}{_domain}' or displayName eq '{urlEncodedKey}'")
                     .GetAsync();
 
             var user = results.Count > 0 ? results.First() : null;
@@ -96,7 +105,9 @@ namespace FitnessTracker.Api.Services
         public async Task<UserAD> Create(UserAD user)
         {
             var micrographUser = _mapper.Map<UserAD, User>(user);
-            micrographUser.UserPrincipalName = $"{user.GivenName.First()}{user.Surname}@davidgodi84gmail.onmicrosoft.com";
+            micrographUser.UserPrincipalName = $"{user.GivenName.First()}{user.Surname}{_domain}";
+            micrographUser.DisplayName = $"{user.GivenName} {user.Surname}";
+            micrographUser.MailNickname = $"{user.GivenName.First()}{user.Surname}";
             micrographUser.AccountEnabled = true;
             micrographUser.PasswordProfile = new PasswordProfile
             {
@@ -143,7 +154,7 @@ namespace FitnessTracker.Api.Services
                    PasswordProfile = new PasswordProfile
                    {
                        ForceChangePasswordNextSignIn = false,
-                       Password = "YourPassword"
+                       Password = password
                    }
                });
 
