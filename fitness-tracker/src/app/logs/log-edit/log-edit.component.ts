@@ -33,7 +33,7 @@ import { LogService } from '../log.service';
 
     
     ngOnDestroy(): void {
-        this._onDestroy.next();
+        //this._onDestroy.next();
         this._onDestroy.complete();
     }
 

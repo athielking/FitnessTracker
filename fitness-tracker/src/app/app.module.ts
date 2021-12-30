@@ -3,7 +3,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { JwtInterceptor, JwtModule } from "@auth0/angular-jwt";
 import { CookieService } from 'ngx-cookie-service'
 
 import { AppComponent } from "./app.component";
@@ -17,7 +16,6 @@ import { AuthGuard, AuthService } from './auth/index';
 
 import { AuthAccountLoginComponent } from './auth/auth-account/auth-account-login.component';
 import { HttpClientService } from './core/services/httpclient.service';
-import {environment} from '../environments/environment'
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AuthAccountRegisterComponent } from './auth/auth-account/auth-account-register.component';
 
