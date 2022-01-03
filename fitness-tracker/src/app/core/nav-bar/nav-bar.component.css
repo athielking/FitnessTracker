@@ -1,0 +1,12 @@
+.nav-pills > li > a {
+    color: #999 !important;
+}
+
+.nav-pills > li > a.active {
+    background-color: #000 !important;
+    color:aqua !important;
+  }
+  
+.nav-pills > li > a:hover {
+    color: #ffffff !important;
+}

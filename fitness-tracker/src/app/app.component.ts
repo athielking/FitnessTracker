@@ -27,6 +27,14 @@ export class AppComponent  implements OnInit{
       })
   }
 
+  isLoggedIn(){
+    return this.authStore.isLoggedIn;
+  }
+
+  login(){
+    
+  }
+
   logout(){
     this.authStore.logout();
   }

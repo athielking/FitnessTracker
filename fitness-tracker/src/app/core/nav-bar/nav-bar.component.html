@@ -1,0 +1,24 @@
+<header>
+  <nav class='navbar navbar-expand navbar-dark bg-dark sticky-top'>
+    <div class="container">
+      <a class='navbar-brand' [routerLink]="['/']"><b>{{title}}</b></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+        aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end" [ngClass]="{ show: isExpanded }">
+        <ul class='nav nav-pills'>
+          <li><a class='nav-link' [routerLink]="['/welcome']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
+          <li *ngIf="loggedIn"><a class='nav-link' [routerLink]="['/logs']">Log List</a></li>
+        </ul>
+        <ul class='nav nav-pills ml-auto' *ngIf="!loggedIn">
+          <li><a class='nav-link' [routerLink]="['/register']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Register</a></li>
+          <li><a class='nav-link' [routerLink]="['/login']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Login</a></li>
+        </ul>
+        <ul class='nav nav-pills ml-auto' *ngIf="loggedIn">
+          <li><a class='nav-link' (click)="logout()" [routerLink]="['/login']">Log out</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

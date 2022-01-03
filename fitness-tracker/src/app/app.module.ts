@@ -18,6 +18,7 @@ import { AuthAccountLoginComponent } from './auth/auth-account/auth-account-logi
 import { HttpClientService } from './core/services/httpclient.service';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AuthAccountRegisterComponent } from './auth/auth-account/auth-account-register.component';
+import { CoreModule } from './core/core.module';
 
 const appRoute: Routes = [
     {path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule), canLoad: [AuthGuard]},
@@ -44,6 +45,7 @@ const appRoute: Routes = [
     HttpClientModule,
     UsersModule,
     LogsModule,
+    CoreModule,
     ToastrModule.forRoot(), 
     RouterModule.forRoot(appRoute),
   ],
