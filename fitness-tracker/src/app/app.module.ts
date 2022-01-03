@@ -52,13 +52,7 @@ const appRoute: Routes = [
   providers: [
     AuthGuard,
     AuthService,
-    CookieService,
-    HttpClientService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
+    CookieService
   ],
   bootstrap: [AppComponent]
 })
