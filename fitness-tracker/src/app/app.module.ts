@@ -19,6 +19,9 @@ import { HttpClientService } from './core/services/httpclient.service';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AuthAccountRegisterComponent } from './auth/auth-account/auth-account-register.component';
 import { CoreModule } from './core/core.module';
+import { MsalModule } from '@azure/msal-angular';
+import { appServer, getAzureSettings, getMicrosoftGraphSettings } from './appsettingsService';
+import { MsalAuthModule } from './msal/msal.module';
 
 const appRoute: Routes = [
     {path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule), canLoad: [AuthGuard]},
@@ -46,6 +49,7 @@ const appRoute: Routes = [
     UsersModule,
     LogsModule,
     CoreModule,
+    MsalAuthModule.forRoot(getAzureSettings(), getMicrosoftGraphSettings(), appServer()),
     ToastrModule.forRoot(), 
     RouterModule.forRoot(appRoute),
   ],

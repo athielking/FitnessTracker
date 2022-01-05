@@ -3,4 +3,5 @@ export class AzureSettings{
     tenantId:string;
     api:string;
     redirect:string;  
+    aipScopes:string[];
 }
