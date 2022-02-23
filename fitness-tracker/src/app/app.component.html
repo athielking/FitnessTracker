@@ -1,6 +1,6 @@
-<core-nav-bar [title]="title" [loggedIn]="isLoggedIn()" (loginClicked)="login()" (logoutClicked)="logout()"></core-nav-bar>
+<core-nav-bar [title]="title" [loggedIn]="msalService.loggedIn$ | async" (loginClicked)="login()" (logoutClicked)="logout()"></core-nav-bar>
 <div class='container-body'>
-  <div class='container container-main'>
-    <router-outlet></router-outlet>
-  </div>
+    <div class='container container-main'>
+      <router-outlet></router-outlet>
+    </div>
 </div>

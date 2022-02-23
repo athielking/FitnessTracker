@@ -1,28 +1,21 @@
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from "@angular/core";
-import {} from "../core/core.module"
 
 import {
     MsalBroadcastService,
     MsalGuard,
     MsalInterceptor,
-    MsalModule,
     MsalService,
     MSAL_GUARD_CONFIG,
     MSAL_INSTANCE,
     MSAL_INTERCEPTOR_CONFIG,
   } from "@azure/msal-angular";
-import { CoreModule } from "../core/core.module";
 
 import { MSALGuardConfigFactory, MSALInstanceFactory, MSALInterceptorConfigFactory } from "./msal";
-import { MicrosoftGraphSettings} from "./models/microsoftGraphSettings";
-import { AzureSettings } from "./models/azureSettings";
+import { MsalAuthService } from "./msal.service";
+import { AZURE_SETTINGS, MICROSOFT_GRAPH_SETTINGS } from "../core/services/appsettings-services";
 
-@NgModule({
-    
-    imports: [CoreModule],
-    providers:[]
-})
+@NgModule()
 export class MsalAuthModule{
     constructor(@Optional() @SkipSelf() parentModule?: MsalAuthModule){
         if (parentModule) {
@@ -31,18 +24,35 @@ export class MsalAuthModule{
         }
     }
     
-    static forRoot(azureSettings:AzureSettings, microsoftGraph: MicrosoftGraphSettings, apiUrl:string):ModuleWithProviders<MsalAuthModule> {
-        return{
+    static forRoot():ModuleWithProviders<MsalAuthModule> {
+        return({
             ngModule: MsalAuthModule,
             providers:[
-                {provide:MSAL_INSTANCE, useFactory:MSALInstanceFactory, deps:[azureSettings, microsoftGraph]},
-                {provide:MSAL_GUARD_CONFIG, useFactory: MSALGuardConfigFactory, deps:[azureSettings]},
-                {provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true},
-                {provide: MSAL_INTERCEPTOR_CONFIG, useFactory: MSALInterceptorConfigFactory, deps:[azureSettings, microsoftGraph, apiUrl]},
+                {
+                    provide: MSAL_INSTANCE,
+                    useFactory: MSALInstanceFactory,
+                    deps:[AZURE_SETTINGS]
+                },
+                {
+                    provide: MSAL_INTERCEPTOR_CONFIG,
+                    useFactory: MSALInterceptorConfigFactory,
+                    deps:[MICROSOFT_GRAPH_SETTINGS]
+                },
+                {
+                    provide: HTTP_INTERCEPTORS,
+                    useClass: MsalInterceptor,
+                    multi: true,
+                },
+                {
+                    provide: MSAL_GUARD_CONFIG, 
+                    useFactory: MSALGuardConfigFactory, 
+                    deps:[AZURE_SETTINGS]
+                },
                 MsalService,
                 MsalGuard,
-                MsalBroadcastService
+                MsalBroadcastService,
+                MsalAuthService
             ]
-        };
+        });
     }
 }

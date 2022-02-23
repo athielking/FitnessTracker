@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import * as MicrosoftGraph from "@microsoft/microsoft-graph-types";
 
-import { AuthStore } from './auth/auth.store';
+import { MsalAuthService } from './msal/msal.service';
 
 
 @Component({
@@ -9,33 +12,52 @@ import { AuthStore } from './auth/auth.store';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css', '../../node_modules/ngx-toastr/toastr.css']
 })
-export class AppComponent  implements OnInit{
-  
-  authorized$: Observable<boolean>;
-  
-  loggedInUser: string;
+export class AppComponent implements OnInit, OnDestroy{
   title:string = 'Fitness Tracker';
+  
+  profile$?: Observable<MicrosoftGraph.User>;
+  users$?: Observable<MicrosoftGraph.User[]>;
+  users?: MicrosoftGraph.User[];
 
-  constructor(private authStore:AuthStore){
-      this.authorized$ = this.authStore.isLoggedIn$;
-      var x = 0;
-  }
+  userNameFilter: string = "";
+
+  private _onDestroy$ = new Subject();
+
+  constructor(public msalService:MsalAuthService){}
 
   ngOnInit(): void {
-      this.authStore.loggedInUser$.subscribe(user =>{
-          this.loggedInUser = user && user.userName ? user.userName : ""
-      })
+    this.msalService.checkAccount();
   }
 
-  isLoggedIn(){
-    return this.authStore.isLoggedIn;
+  ngOnDestroy(): void {
+      if(this._onDestroy$){
+        this._onDestroy$.unsubscribe();
+      }
   }
 
   login(){
-    
+    this.msalService.login();
   }
 
   logout(){
-    this.authStore.logout();
+    this.msalService.logout();
+  }
+
+  getProfile() {
+    this.profile$ = this.msalService.getProfile();
+  }
+
+  getUsers() {
+    let params = new HttpParams().set("$top", "10");
+        if (this.userNameFilter) {
+          params = params.set(
+            "$filter",
+            `startsWith(displayName, '${this.userNameFilter}')`
+          );
+        }
+    
+    this.msalService.getUsers(params)
+      .pipe(takeUntil(this._onDestroy$))
+      .subscribe((users) => (this.users = users.value));;
   }
 }

@@ -1,24 +1,27 @@
-import { CommonModule } from "@angular/common";
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { HttpClientModule} from "@angular/common/http";
 import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { BrowserModule } from "@angular/platform-browser";
 import { RouterModule } from '@angular/router';
-import { AuthInterceptor } from "../auth/auth.interceptor";
 import { NavBarComponent } from "./nav-bar/nav-bar.component";
-import { HttpClientService } from "./services/httpclient.service";
 
 @NgModule({   
-    declarations:[NavBarComponent],
-    exports:[NavBarComponent],
-    imports:[
-        CommonModule, RouterModule
+    declarations:[
+        NavBarComponent
     ],
-    providers:[
-        HttpClientService,
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: AuthInterceptor,
-          multi: true
-        }
-    ]
+    imports:[
+        BrowserModule, 
+        RouterModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    exports:[
+        BrowserModule, 
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NavBarComponent
+    ], 
 })
 export class CoreModule{}

@@ -1,5 +1,3 @@
-import { InjectionToken } from "@angular/core";
-
 import { MsalInterceptorConfiguration, MsalGuardConfiguration} from "@azure/msal-angular";
 import {
   BrowserCacheLocation,
@@ -9,21 +7,18 @@ import {
   LogLevel
 } from "@azure/msal-browser";
 
-import { AzureSettings } from "./models/azureSettings";
-import { MicrosoftGraphSettings } from "./models/microsoftGraphSettings";
-
-export const AUTH_CONFIG_URL_TOKEN = new InjectionToken<string>('AUTH_CONFIG_URL');
+import { AzureSettings } from "./models/azure-settings";
+import { MicrosoftGraphSettings } from "./models/microsoftgraph-settings";
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
     console.log(message);
 }
 
-export function MSALInstanceFactory(azureSettings: AzureSettings, microsoftGraph: MicrosoftGraphSettings): IPublicClientApplication {
+export function MSALInstanceFactory(azureSettings:AzureSettings): IPublicClientApplication {
     return new PublicClientApplication({
       auth: {
         clientId: azureSettings.clientId,
-        authority: `${microsoftGraph.baseAddress}${azureSettings.tenantId}`,
-        redirectUri: azureSettings.redirect
+        authority: `${azureSettings.baseAddress}${azureSettings.tenantId}`,
       },
       cache: {
         cacheLocation: BrowserCacheLocation.LocalStorage,
@@ -42,7 +37,7 @@ export function MSALInstanceFactory(azureSettings: AzureSettings, microsoftGraph
     const protectedResourceMap = new Map<string, Array<string>>();
   
     // Define which permissions (=scopes) we need for Microsoft Graph
-    protectedResourceMap.set(`${microsoftGraphSettings.baseAddress}v1.0/`, microsoftGraphSettings.scopes);
+    protectedResourceMap.set(microsoftGraphSettings.baseAddress, microsoftGraphSettings.scopes);
 
     var scopes = azureSettings.aipScopes.map( (value) => {
         return `${azureSettings.api}/${value}`
