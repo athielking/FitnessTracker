@@ -1,15 +1,16 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web.Resource;
+using Microsoft.AspNetCore.Authorization;
+
 using AutoMapper;
+
 using FitnessTracker.DTO;
 using FitnessTracker.Core.Entities;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Authorization;
 using FitnessTracker.Data.Repositories;
 using FitnessTracker.Api.Extenisons;
 
@@ -17,6 +18,8 @@ namespace FitnessTracker.Controllers
 {
 
     [Route("api/[Controller]")]
+    [ApiController]
+    [Authorize]
     public class LogController : Controller
     {
         private readonly ILogRepository _logRepository;
@@ -32,8 +35,8 @@ namespace FitnessTracker.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet("GetAll")]
-        public ActionResult<IEnumerable<LogDTO>> GetAll()
+        [HttpGet]
+        public ActionResult<IEnumerable<LogDTO>> GetUserLog()
         {
             try
             {
@@ -172,5 +175,27 @@ namespace FitnessTracker.Controllers
                 return BadRequest("Failed to delete log");
             }
         }
+
+        [HttpGet("ReadLog")]
+        [RequiredScope("read")]
+        public IActionResult ReadLog()
+        {
+            return Ok($"read log access:");
+        }
+
+        [HttpPost("AddLog")]
+        [RequiredScope("write")]
+        public IActionResult AddLog([FromBody] string str)
+        {
+            return Ok($"Add log write access: { str }");
+        }
+
+        [HttpPost("clear")]
+        [RequiredScope("admin")]
+        public IActionResult AdminAccess([FromBody] string str)
+        {
+            return Ok($"admin access: { str }");
+        }
+
     }
 }
