@@ -7,6 +7,7 @@ using FitnessTracker.Data.Repositories;
 using AutoMapper;
 using FitnessTracker.DTO;
 using FitnessTracker.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitnessTracker.Controllers
 {
@@ -25,6 +26,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<ExerciseDTO>> Get()
         {
             try
