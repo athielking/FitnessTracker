@@ -26,6 +26,5 @@ namespace FitnessTracker.Api.DTO
         public string LastName { get; set; }
 
         public string PhoneNumber { get; set; }
-
     }
 }

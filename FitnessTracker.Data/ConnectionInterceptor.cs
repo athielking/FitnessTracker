@@ -22,26 +22,27 @@ namespace FitnessTracker.Data
             }
             _partialDns = partialDns;
         }
+  
+        /// <inheritdoc/>
 
         public override InterceptionResult ConnectionOpening(DbConnection connection, ConnectionEventData eventData, InterceptionResult result)
         {
             if (connection is SqlConnection conn && conn.DataSource.Contains($".{_partialDns}", StringComparison.InvariantCultureIgnoreCase))
             {
-                conn.AccessToken = new AzureServiceTokenProvider()
-                    .GetAccessTokenAsync($"https://{_partialDns}/")
-                    .GetAwaiter()
-                    .GetResult();
+                Task<string> task = new AzureServiceTokenProvider().GetAccessTokenAsync($"https://{_partialDns}/");
+                conn.AccessToken = task.Result;
             }
 
             return result;
         }
 
+        /// <inheritdoc/>
+        
         public override async Task<InterceptionResult> ConnectionOpeningAsync(DbConnection connection, ConnectionEventData eventData, InterceptionResult result, CancellationToken cancellationToken = default)
         {
             if (connection is SqlConnection conn && conn.DataSource.Contains($".{_partialDns}", StringComparison.InvariantCultureIgnoreCase))
             {
-                conn.AccessToken = await new AzureServiceTokenProvider()
-                    .GetAccessTokenAsync($"https://{_partialDns}/");
+                conn.AccessToken = await new AzureServiceTokenProvider().GetAccessTokenAsync($"https://{_partialDns}/");
             }
 
             return result;

@@ -1,19 +1,6 @@
-<nav class='navbar navbar-expand navbar-dark bg-dark sticky-top'>
-  <a class='navbar-brand'><b>{{title}}</b></a>
-  <ul class='nav nav-pills'>
-    <li><a class='nav-link' [routerLink]="['/welcome']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
-    <li *ngIf="(authorized$ | async)"><a class='nav-link' [routerLink]="['/logs']">Log List</a></li>
-  </ul>
-  <ul class='nav nav-pills ml-auto' *ngIf="!(authorized$ | async)">
-    <li><a class='nav-link' [routerLink]="['/register']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Register</a></li>
-    <li><a class='nav-link' [routerLink]="['/login']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Login</a></li>
-  </ul>
-  <ul class='nav nav-pills ml-auto' *ngIf="(authorized$ | async)">
-    <li><a class='nav-link' (click)="logout()" [routerLink]="['/login']">Log out</a></li>
-  </ul>
-</nav>
+<core-nav-bar [title]="title" [loggedIn]="msalService.loggedIn$ | async" (loginClicked)="login()" (logoutClicked)="logout()"></core-nav-bar>
 <div class='container-body'>
-  <div class='container container-main'>
-    <router-outlet></router-outlet>
-  </div>
+    <div class='container container-main'>
+      <router-outlet></router-outlet>
+    </div>
 </div>

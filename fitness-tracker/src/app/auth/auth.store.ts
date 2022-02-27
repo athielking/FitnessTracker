@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { tap, catchError, mapTo } from 'rxjs/operators';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { CookieService } from 'ngx-cookie-service';
 
 import { AuthService } from './auth.service';
