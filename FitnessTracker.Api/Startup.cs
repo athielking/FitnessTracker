@@ -15,6 +15,7 @@ using FitnessTracker.Data.Repositories;
 using FitnessTracker.Api.Configuration;
 using FitnessTracker.Api.Services;
 using FitnessTracker.Data.Extensions;
+
 using FitnessTracker.Api.Models.Settings;
 
 namespace FitnessTracker
@@ -61,7 +62,6 @@ namespace FitnessTracker
 
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IWorkoutRepository, WorkoutRepository>();
-
             services.AddTransient<IMicrosoftGraphService, MicrosoftGraphService>();
 
             services.AddControllers();

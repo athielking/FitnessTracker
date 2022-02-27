@@ -22,8 +22,9 @@ namespace FitnessTracker.Data
             }
             _partialDns = partialDns;
         }
-        
+  
         /// <inheritdoc/>
+
         public override InterceptionResult ConnectionOpening(DbConnection connection, ConnectionEventData eventData, InterceptionResult result)
         {
             if (connection is SqlConnection conn && conn.DataSource.Contains($".{_partialDns}", StringComparison.InvariantCultureIgnoreCase))
@@ -36,6 +37,7 @@ namespace FitnessTracker.Data
         }
 
         /// <inheritdoc/>
+        
         public override async Task<InterceptionResult> ConnectionOpeningAsync(DbConnection connection, ConnectionEventData eventData, InterceptionResult result, CancellationToken cancellationToken = default)
         {
             if (connection is SqlConnection conn && conn.DataSource.Contains($".{_partialDns}", StringComparison.InvariantCultureIgnoreCase))
