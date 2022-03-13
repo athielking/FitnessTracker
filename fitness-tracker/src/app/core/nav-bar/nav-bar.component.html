@@ -9,7 +9,7 @@
       <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end" [ngClass]="{ show: isExpanded }">
         <ul class='nav nav-pills ml-auto' *ngIf="!loggedIn">
           <li><a class='nav-link' [routerLink]="['/register']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Register</a></li>
-          <li><a class='nav-link' [routerLink]="['/welcome']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Login</a></li>
+          <li><a class='nav-link' (click)="login()" [routerLink]="['/welcome']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Login</a></li>
         </ul>
         <ul class='nav nav-pills ml-auto' *ngIf="loggedIn">
           <li><a class='nav-link' (click)="logout()" [routerLink]="['/welcome']" routerLinkActive="active">Log out</a></li>
