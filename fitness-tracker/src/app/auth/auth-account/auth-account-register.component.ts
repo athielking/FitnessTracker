@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { IUserAccount } from 'src/app/shared/models/user';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { propertyLengthGuard, passwordGuard, confirmedValidator } from 'src/app/shared/custom-validators';
+import { propertyLengthGuard, passwordGuard, confirmedValidator } from 'src/app/shared/validators/custom-validators';
 import { AuthStore } from '../auth.store';
 
 let validationMessages = {

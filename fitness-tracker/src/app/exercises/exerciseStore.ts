@@ -1,23 +1,24 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IExercise } from 'src/app/shared/models/exercise';
 import { tap } from 'rxjs/operators';
-import { ExerciseService } from '../../core/services/exerciseService';
 import { Injectable } from '@angular/core';
+
+import { ExerciseService } from './exercise.service';
+import { Exercise } from '../shared/models/exercise';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ExerciseStore{
     
-    private _exerciseList: BehaviorSubject<IExercise[]> = new BehaviorSubject(null);
-    public exerciseList$:Observable<IExercise[]> = this._exerciseList.asObservable();
+    private _exerciseList: BehaviorSubject<Exercise[]> = new BehaviorSubject(null);
+    public exerciseList$:Observable<Exercise[]> = this._exerciseList.asObservable();
 
     constructor(private exerciseService:ExerciseService){}
 
-    public getExercises():Observable<IExercise[]>{
+    public getExercises():Observable<Exercise[]>{
         return this.exerciseService.getExercises()
             .pipe(tap({
-                next:(exercises:IExercise[]) => {
+                next:(exercises:Exercise[]) => {
                     this._exerciseList.next(exercises)
                 }
             }));

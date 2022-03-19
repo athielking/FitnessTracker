@@ -1,17 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute} from '@angular/router';
 import { Subject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
 
 import { LogService } from '../log.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { ILog, ILogExercise, ISaveLog, ISingleLog, SaveLog, SingleLog, } from 'src/app/shared/models/log';
-import { IExercise } from 'src/app/shared/models/exercise';
+import { ILog, ISaveLog, ISingleLog, SaveLog } from 'src/app/shared/models/log';
 import { AuthStore } from 'src/app/auth';
 import { IUser } from 'src/app/shared/models/user';
-import { ExerciseStore } from 'src/app/shared/stores/exerciseStore';
+import { ExerciseStore } from 'src/app/exercises/exerciseStore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Exercise } from 'src/app/shared/models/exercise';
 
 @Component({
     selector: 'log-create',
@@ -21,18 +20,18 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class LogCreateComponent implements OnInit, OnDestroy{
     
-    exercises$: Observable<IExercise[]> 
-    exercises: IExercise[]
+    exercises$: Observable<Exercise[]> 
+    exercises: Exercise[]
 
     exerciseForm:FormGroup  
     
     log:ISingleLog
 
-    ex:IExercise
+    ex:Exercise
 
     errorMessage:string = ""
     logCreatedOn:string
-    exercise:IExercise;
+    exercise:Exercise;
 
     date:string;
 

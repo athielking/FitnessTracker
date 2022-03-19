@@ -1,17 +1,8 @@
-export function createExercise(exercise?:IExercise){
-    return new Exercise(exercise);
-}
-
-export interface IExercise{
-    exerciseId: number;
-    name: string;
-}
-
-class Exercise implements IExercise{
+export class Exercise{
     exerciseId: number;
     name: string;
     
-    constructor(init?: Partial<IExercise>){
+    constructor(init?: Partial<Exercise>){
         if(init){
             Object.assign(this, init)
         }
