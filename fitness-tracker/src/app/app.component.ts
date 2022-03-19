@@ -43,7 +43,9 @@ export class AppComponent implements OnInit, OnDestroy{
     this.msalService.logout();
   }
 
-  getProfile() {
+  // remove unused code
+
+  /*getProfile() {
     this.profile$ = this.msalService.getProfile();
   }
 
@@ -59,5 +61,5 @@ export class AppComponent implements OnInit, OnDestroy{
     this.msalService.getUsers(params)
       .pipe(takeUntil(this._onDestroy$))
       .subscribe((users) => (this.users = users.value));;
-  }
+  }*/
 }

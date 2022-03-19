@@ -13,7 +13,7 @@ import {
 
 import { MSALGuardConfigFactory, MSALInstanceFactory, MSALInterceptorConfigFactory } from "./msal";
 import { MsalAuthService } from "./msal.service";
-import { AZURE_SETTINGS, MICROSOFT_GRAPH_SETTINGS } from "../core/services/appsettings-services";
+import { AZURE_SETTINGS, MICROSOFT_GRAPH_SETTINGS } from "../core/services/appsettings.services";
 
 @NgModule()
 export class MsalAuthModule{

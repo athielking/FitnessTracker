@@ -3,7 +3,7 @@ import { MsalService } from "@azure/msal-angular";
 import { AuthenticationResult } from "@azure/msal-browser";
 import * as MicrosoftGraph from "@microsoft/microsoft-graph-types";
 import { BehaviorSubject, Observable } from "rxjs";
-import { MICROSOFT_GRAPH_SETTINGS } from "../core/services/appsettings-services";
+import { MICROSOFT_GRAPH_SETTINGS } from "../core/services/appsettings.services";
 
 import { HttpClientService } from "../core/services/httpclient.service";
 import { MicrosoftGraphSettings } from "./models/microsoftgraph-settings";

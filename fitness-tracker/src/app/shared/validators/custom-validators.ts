@@ -1,5 +1,5 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { patternValidator } from './string-helper';
+import { patternValidator } from '../string-helper';
 
 export function passwordGuard(num:number) : {[key:string]: any} | null{
 

@@ -15,11 +15,13 @@ import { CoreModule } from './core/core.module';
 import { MsalAuthModule } from './msal/msal.module';
 import { MSALAuthguard } from './msal/msal-authguard';
 import { MsalGuard, MsalRedirectComponent } from '@azure/msal-angular';
+import { ExercisesModule } from './exercises/exercises.module';
+import { BrowserModule } from '@angular/platform-browser';
 
 const appRoute: Routes = [
-    {path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule), canLoad: [MSALAuthguard, MsalGuard]},
-    {path: 'logs', loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule), canLoad: [MSALAuthguard, MsalGuard]},
-    //{path: 'login', component: AuthAccountLoginComponent},
+    {path: 'exercises', loadChildren: () => import('./exercises/exercises.module').then(m => m.ExercisesModule)},
+    /*{path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule), canLoad: [MSALAuthguard, MsalGuard]},
+    {path: 'logs', loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule), canLoad: [MSALAuthguard, MsalGuard]},*/
     {path: 'register', component: AuthAccountRegisterComponent},
     {path: 'welcome', component: WelcomeComponent},
     {path: 'auth', component: MsalRedirectComponent },
@@ -35,12 +37,11 @@ const appRoute: Routes = [
     WelcomeComponent
   ],
   imports: [
-    UsersModule,
-    LogsModule,
     CoreModule,
+    ExercisesModule,  
     MsalAuthModule.forRoot(),
     ToastrModule.forRoot(), 
-    RouterModule.forRoot(appRoute),
+    RouterModule.forRoot(appRoute)
   ],
   providers: [
     MSALAuthguard,
